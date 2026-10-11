@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* ── Core Palette: Sage Green, Walnut Brown, Amber Glow ── */
+  --color-sage-green: #87A96B;
+  --color-walnut-brown: #5A3E2B;
+  --color-amber-glow: #D5851F;
+  --color-warm-paper: #FAF8F5;
+
+  /* Aliases mapped to the new palette for full backward-compatibility */
+  --color-ink-navy: #5A3E2B;
+  --color-signal-orange: #D5851F;
+  --color-slate-blue: #6E5748;
+  --color-verified-teal: #87A96B;
+  --color-caution-amber: #D5851F;
+  --color-petal-gold: #E5A344;
+
+  --animate-breathe: breathe 10s ease-in-out infinite;
+
+  /* Sage Green Scale (#87A96B) */
+  --color-sage-green-50: #F4F7F1;
+  --color-sage-green-100: #E6EEDF;
+  --color-sage-green-200: #CFDFC3;
+  --color-sage-green-300: #B5CEA2;
+  --color-sage-green-400: #9DBD84;
+  --color-sage-green-500: #87A96B;
+  --color-sage-green-600: #6E8E53;
+  --color-sage-green-700: #55703F;
+  --color-sage-green-800: #3D522D;
+  --color-sage-green-900: #26341C;
+
+  /* Walnut Brown Scale (#5A3E2B) */
+  --color-walnut-brown-50: #F8F5F2;
+  --color-walnut-brown-100: #ECE4DD;
+  --color-walnut-brown-200: #D8C8BB;
+  --color-walnut-brown-300: #C1AA97;
+  --color-walnut-brown-400: #8E6D54;
+  --color-walnut-brown-500: #5A3E2B;
+  --color-walnut-brown-600: #4A3222;
+  --color-walnut-brown-700: #3B271A;
+  --color-walnut-brown-800: #2B1C12;
+  --color-walnut-brown-900: #1C120A;
+
+  /* Amber Glow Scale (#D5851F) */
+  --color-amber-glow-50: #FEF9F0;
+  --color-amber-glow-100: #FCEFD8;
+  --color-amber-glow-200: #F8DCB0;
+  --color-amber-glow-300: #F2C582;
+  --color-amber-glow-400: #E4A247;
+  --color-amber-glow-500: #D5851F;
+  --color-amber-glow-600: #B86C14;
+  --color-amber-glow-700: #92520B;
+  --color-amber-glow-800: #6C3B07;
+  --color-amber-glow-900: #432403;
+
+  /* ink-navy aliases mapped to walnut-brown shades */
+  --color-ink-navy-50: #F8F5F2;
+  --color-ink-navy-100: #ECE4DD;
+  --color-ink-navy-200: #D8C8BB;
+  --color-ink-navy-300: #C1AA97;
+  --color-ink-navy-400: #8E6D54;
+  --color-ink-navy-500: #5A3E2B;
+  --color-ink-navy-600: #4A3222;
+  --color-ink-navy-700: #3B271A;
+  --color-ink-navy-800: #2B1C12;
+  --color-ink-navy-900: #1C120A;
+
+  /* signal-orange aliases mapped to amber-glow shades */
+  --color-signal-orange-50: #FEF9F0;
+  --color-signal-orange-100: #FCEFD8;
+  --color-signal-orange-200: #F8DCB0;
+  --color-signal-orange-300: #F2C582;
+  --color-signal-orange-400: #E4A247;
+  --color-signal-orange-500: #D5851F;
+  --color-signal-orange-600: #B86C14;
+  --color-signal-orange-700: #92520B;
+  --color-signal-orange-800: #6C3B07;
+  --color-signal-orange-900: #432403;
+
+  /* verified-teal aliases mapped to sage-green shades */
+  --color-verified-teal-50: #F4F7F1;
+  --color-verified-teal-100: #E6EEDF;
+  --color-verified-teal-200: #CFDFC3;
+  --color-verified-teal-300: #B5CEA2;
+  --color-verified-teal-400: #9DBD84;
+  --color-verified-teal-500: #87A96B;
+  --color-verified-teal-600: #6E8E53;
+  --color-verified-teal-700: #55703F;
+  --color-verified-teal-800: #3D522D;
+  --color-verified-teal-900: #26341C;
+
+  /* caution-amber aliases mapped to amber-glow shades */
+  --color-caution-amber-50: #FEF9F0;
+  --color-caution-amber-100: #FCEFD8;
+  --color-caution-amber-200: #F8DCB0;
+  --color-caution-amber-300: #F2C582;
+  --color-caution-amber-400: #E4A247;
+  --color-caution-amber-500: #D5851F;
+  --color-caution-amber-600: #B86C14;
+  --color-caution-amber-700: #92520B;
+  --color-caution-amber-800: #6C3B07;
+  --color-caution-amber-900: #432403;
+
+  /* slate-blue aliases mapped to warm earthy tone shades */
+  --color-slate-blue-50: #F7F5F2;
+  --color-slate-blue-100: #EBE5E0;
+  --color-slate-blue-200: #D7CCC2;
+  --color-slate-blue-300: #BAA99C;
+  --color-slate-blue-400: #928072;
+  --color-slate-blue-500: #6E5748;
+  --color-slate-blue-600: #584437;
+  --color-slate-blue-700: #453429;
+  --color-slate-blue-800: #34261D;
+  --color-slate-blue-900: #231913;
+
+  /* petal-gold aliases */
+  --color-petal-gold-50: #FEF9F0;
+  --color-petal-gold-100: #FCEFD8;
+  --color-petal-gold-200: #F8DCB0;
+  --color-petal-gold-300: #F2C582;
+  --color-petal-gold-400: #E4A247;
+  --color-petal-gold-500: #E5A344;
+  --color-petal-gold-600: #BF822D;
+  --color-petal-gold-700: #99631C;
+  --color-petal-gold-800: #73470F;
+  --color-petal-gold-900: #4D2D06;
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-warm-paper);
+    color: var(--color-walnut-brown);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amber-glow);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+::selection {
+  background-color: rgba(213, 133, 31, 0.25);
+  color: inherit;
+}
+
+.ink-stamp {
+  position: relative;
+}
+.ink-stamp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  border-radius: inherit;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(0.68); }
+  50%      { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+@keyframes shine {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 800; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.08; }
+  50%      { opacity: 0.2; }
+}
+
+@keyframes tilt {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-4deg); }
+  75%      { transform: rotate(4deg); }
+}
+
+/* Hide scrollbar utility for horizontal filter strips */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Premium horizontal scrollbar utility */
+.scrollbar-premium::-webkit-scrollbar {
+  height: 5px;
+}
+.scrollbar-premium::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-premium::-webkit-scrollbar-thumb {
+  background: rgba(90, 62, 43, 0.18);
+  border-radius: 9999px;
+}
+.scrollbar-premium::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 62, 43, 0.35);
+}
+.scrollbar-premium {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 62, 43, 0.18) transparent;
+}
