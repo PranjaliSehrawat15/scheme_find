@@ -3,12 +3,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/logo";
 
 export function Navbar() {
   const { user, signOut, loading } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const router = useRouter();
   const pathname = usePathname() || "";
   const [menuOpen, setMenuOpen] = useState(false);
@@ -191,6 +193,25 @@ export function Navbar() {
                 </Link>
               </>
             )}
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#5A3E2B]/15 bg-[#FAF8F5] text-[#5A3E2B] hover:bg-[#5A3E2B]/10 hover:border-[#D5851F]/40 transition-all cursor-pointer shadow-xs active:scale-95"
+            >
+              {isDark ? (
+                <svg className="h-4 w-4 text-[#D5851F] transition-transform duration-300 hover:rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="5" />
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+              ) : (
+                <svg className="h-4 w-4 text-[#5A3E2B]/80 transition-transform duration-300 hover:-rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                </svg>
+              )}
+            </button>
 
             {/* Mobile Hamburger Button */}
             <div className="md:hidden relative" ref={mobileMenuRef}>

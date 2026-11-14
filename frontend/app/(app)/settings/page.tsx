@@ -49,6 +49,7 @@ function loadSettings(): Settings {
 function saveSettings(s: Settings) {
   if (typeof window === "undefined") return;
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  window.dispatchEvent(new Event("schemefind_theme_change"));
 }
 
 function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange: (v: boolean) => void; label: string; desc: string }) {
@@ -110,6 +111,16 @@ export default function SettingsPage() {
   useEffect(() => {
     setSettings(loadSettings());
     setSettingsLoaded(true);
+
+    const handleSync = () => {
+      setSettings(loadSettings());
+    };
+    window.addEventListener("schemefind_theme_change", handleSync);
+    window.addEventListener("storage", handleSync);
+    return () => {
+      window.removeEventListener("schemefind_theme_change", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
   }, []);
 
   // ── Persist + apply side effects on change ──────────────────────────
