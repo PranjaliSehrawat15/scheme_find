@@ -1177,14 +1177,28 @@ def _register_routes(app: FastAPI) -> None:
             # ── Enhanced scheme matching with synonym expansion ──────────
             import re as _re
             q = clean_msg.lower()
-            q_clean = _re.sub(r"[^a-z0-9\s-]", "", q)
-            words = [w for w in q_clean.split() if len(w) > 2]
+            q_clean = _re.sub(r"[^a-z0-9\s-]", " ", q)
+            
+            STOP_WORDS = {
+                "am", "i", "me", "my", "we", "our", "you", "your", "what", "is", "are", 
+                "who", "whom", "how", "why", "when", "where", "can", "could", "would", 
+                "should", "the", "a", "an", "and", "or", "for", "with", "from", "at", 
+                "by", "in", "on", "to", "of", "tell", "about", "give", "get", "gets", 
+                "eligible", "eligibility", "benefit", "scheme", "schemes", "apply"
+            }
+            raw_words = [w.strip() for w in q_clean.split() if len(w.strip()) > 1]
+            content_words = [w for w in raw_words if w not in STOP_WORDS]
+            
+            # Phrase bigrams (e.g. "ayushman bharat", "pm kisan", "fasal bima")
+            phrases = []
+            for i in range(len(content_words) - 1):
+                phrases.append(f"{content_words[i]} {content_words[i+1]}")
 
             # Synonym/intent expansion map for common welfare terms
             SYNONYMS: dict[str, list[str]] = {
                 "farmer": ["agriculture", "kisan", "farming", "crop", "land"],
                 "agriculture": ["farmer", "kisan", "farming", "crop"],
-                "health": ["medical", "hospital", "doctor", "treatment", "insurance", "ayushman"],
+                "health": ["medical", "hospital", "doctor", "treatment", "insurance", "ayushman", "pmjay"],
                 "education": ["school", "college", "scholarship", "student", "study"],
                 "scholarship": ["education", "student", "merit", "fee"],
                 "women": ["woman", "female", "mother", "maternity", "girl", "lady"],
@@ -1200,8 +1214,8 @@ def _register_routes(app: FastAPI) -> None:
                 "marriage": ["wedding", "shaadi", "bride", "dowry"],
             }
 
-            expanded_words = set(words)
-            for w in words:
+            expanded_words = set(content_words)
+            for w in content_words:
                 if w in SYNONYMS:
                     expanded_words.update(SYNONYMS[w])
                 for key, syns in SYNONYMS.items():
@@ -1213,17 +1227,42 @@ def _register_routes(app: FastAPI) -> None:
                 name = s.scheme_name.lower()
                 cat = s.scheme_category.value.lower() if hasattr(s.scheme_category, "value") else str(s.scheme_category).lower()
                 summary = s.benefit_summary.lower()
-                combined = f"{name} {cat} {summary}"
+                slug = s.scheme_id.lower()
+                est = (s.benefit_value_estimate or "").lower()
+                
                 score = 0
-                if q_clean in name:
-                    score += 100
-                for w in expanded_words:
+                # Phrase matches in scheme name are massive signals (e.g. "ayushman bharat")
+                for p in phrases:
+                    if p in name:
+                        score += 350
+                        if name.startswith(p):
+                            score += 150
+                    if p in slug:
+                        score += 250
+
+                # Specific amount match (e.g. 5 lakh / 500,000 / 6,000)
+                for amt in ("5l", "5 lakh", "500000", "500,000", "6000", "6,000", "12000", "12,000"):
+                    if amt in q and (amt in summary or amt in est or amt in name):
+                        score += 200
+
+                # Direct user query words match (much higher weight than synonyms)
+                for w in content_words:
                     if w in name:
-                        score += 20
-                    if w in cat:
+                        score += 70
+                    elif w in slug:
+                        score += 60
+                    elif w in summary:
+                        score += 15
+                    elif w in cat:
                         score += 10
-                    if w in summary:
-                        score += 5
+
+                # Mild synonym bonus
+                for w in expanded_words:
+                    if w not in content_words:
+                        if w in name:
+                            score += 10
+                        elif w in summary:
+                            score += 5
                 return score
 
             scored = []
@@ -1314,21 +1353,88 @@ RULES:
             if not reply:
                 # Deterministic fallback: build from real scheme data
                 if matched:
-                    lines = ["Here are the most relevant schemes for your query:"]
-                    for s in matched[:5]:
-                        cat = str(s.scheme_category).replace("SchemeCategory.", "").replace("_", " ").title() if s.scheme_category else ""
-                        lines.append(f"\n**{s.scheme_name}** ({cat})")
-                        lines.append(f"  {s.benefit_summary}")
-                        lines.append(f"  Benefit estimate: {s.benefit_value_estimate}")
-                        if s.required_documents:
-                            lines.append(f"  Required docs: {', '.join(s.required_documents)}")
-                        lines.append(f"  Apply: {s.application_url or 'Contact issuing authority'}")
-                    reply = "\n".join(lines)
+                    top = matched[0]
+                    top_score = scored[0][1] if scored else 0
+                    
+                    # If high-confidence match for a specific scheme: provide a direct, to-the-point answer!
+                    if top_score >= 120:
+                        est = (top.benefit_value_estimate or "").replace("Γé╣", "₹").strip()
+                        summary = (top.benefit_summary or "").replace("Γé╣", "₹").strip()
+                        cat = str(top.scheme_category).replace("SchemeCategory.", "").replace("_", " ").title() if top.scheme_category else ""
+                        
+                        lines = [f"### **{top.scheme_name}** ({cat})\n"]
+                        lines.append(f"**Eligibility & Overview:**")
+                        lines.append(f"{summary}\n")
+                        
+                        if est:
+                            lines.append(f"• **Benefit Amount:** {est}")
+                        
+                        if hasattr(top, 'eligibility_rules') and top.eligibility_rules:
+                            rules = top.eligibility_rules
+                            rule_items = []
+                            min_age = getattr(rules, 'min_age', None)
+                            max_age = getattr(rules, 'max_age', None)
+                            if min_age and max_age:
+                                rule_items.append(f"Age: {min_age} to {max_age} years")
+                            elif min_age:
+                                rule_items.append(f"Minimum age: {min_age} years")
+                            elif max_age:
+                                rule_items.append(f"Maximum age: {max_age} years")
+                            
+                            max_inc = getattr(rules, 'max_annual_income', None) or getattr(rules, 'max_income', None)
+                            if max_inc and 0 < max_inc < 100000000:
+                                rule_items.append(f"Family income limit: Under ₹{int(max_inc):,}/year")
+                            
+                            soc = getattr(rules, 'allowed_social_categories', None)
+                            if soc:
+                                rule_items.append(f"Social categories: {', '.join(soc).upper()}")
+                            
+                            occ = getattr(rules, 'allowed_occupations', None)
+                            if occ:
+                                rule_items.append(f"Applicable occupations: {', '.join(occ).title()}")
+                            
+                            if rule_items:
+                                lines.append(f"• **Key Eligibility Rules:**")
+                                for r in rule_items:
+                                    lines.append(f"  - {r}")
+                            elif getattr(top, 'eligibility_text_raw', None):
+                                clean_raw = top.eligibility_text_raw.replace("&gt;", "").replace("<br>", "").replace("\t", " ").strip()
+                                first_lines = [l.strip() for l in clean_raw.split("\n") if l.strip() and not l.strip().startswith("<")][:3]
+                                if first_lines:
+                                    lines.append(f"• **Eligibility Criteria:** " + "; ".join(first_lines))
+                        
+                        if top.required_documents:
+                            docs = [d.replace("_", " ").title() for d in top.required_documents]
+                            lines.append(f"• **Required Documents:** {', '.join(docs)}")
+                        
+                        apply_url = top.application_url or getattr(top, 'official_source_url', None)
+                        if apply_url:
+                            lines.append(f"\n👉 **Official Portal & Application:** [{top.scheme_name}]({apply_url})")
+                        
+                        # If there are other related schemes, mention them briefly
+                        related = [s.scheme_name for s in matched[1:4] if s.scheme_name != top.scheme_name]
+                        if related:
+                            lines.append(f"\n*Related schemes you may also check:* {', '.join(related)}")
+                        
+                        reply = "\n".join(lines)
+                    else:
+                        lines = ["Here are the most relevant schemes for your query:"]
+                        for s in matched[:3]:
+                            cat = str(s.scheme_category).replace("SchemeCategory.", "").replace("_", " ").title() if s.scheme_category else ""
+                            est = (s.benefit_value_estimate or "").replace("Γé╣", "₹").strip()
+                            lines.append(f"\n**{s.scheme_name}** ({cat})")
+                            lines.append(f"  {s.benefit_summary.replace('Γé╣', '₹')}")
+                            if est:
+                                lines.append(f"  Benefit: {est}")
+                            if s.required_documents:
+                                lines.append(f"  Required docs: {', '.join(s.required_documents)}")
+                            lines.append(f"  Apply: {s.application_url or 'Contact issuing authority'}")
+                        reply = "\n".join(lines)
                 else:
                     reply = (
                         "I couldn't find specific schemes matching your question. "
-                        "Try asking about a specific scheme name, category (e.g. agriculture, education, health), "
-                        "or benefit type. You can also browse all schemes on the Schemes page."
+                        "Try asking about a specific scheme name (e.g. Ayushman Bharat, PM-KISAN, Sukanya Samriddhi), "
+                        "or a category like agriculture, education, or health."
                     )
 
             return ChatResponse(reply=reply, sources=sources)
