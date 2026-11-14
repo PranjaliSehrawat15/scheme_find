@@ -189,12 +189,22 @@ export default function SettingsPage() {
           "Content-Type": "application/json",
         },
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to delete account");
+      if (!res.ok) {
+        let errorMsg = "Failed to delete account";
+        try {
+          const data = await res.json();
+          errorMsg = data.message || errorMsg;
+        } catch { /* fallback */ }
+        throw new Error(errorMsg);
+      }
       setShowDeleteModal(false);
       await signOut("/login");
     } catch (err: any) {
-      setDeleteError(err.message || "Failed to delete account");
+      if (err.name === "TypeError" || err.message?.includes("fetch")) {
+        setDeleteError("Unable to connect to backend server. Please ensure the backend is running on port 8000.");
+      } else {
+        setDeleteError(err.message || "Failed to delete account");
+      }
     } finally {
       setDeleteBusy(false);
     }
