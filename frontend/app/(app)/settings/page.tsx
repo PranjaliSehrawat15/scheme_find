@@ -182,18 +182,45 @@ export default function SettingsPage() {
     setDeleteError("");
     try {
       const token = session?.access_token || "";
-      const res = await fetch(`${API_URL}/api/user`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!res.ok) {
+      // 1. Try Next.js internal API route first (runs on same server as frontend)
+      let res: Response | null = null;
+      try {
+        res = await fetch("/api/user", {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      } catch {
+        // Next.js route network error, fallback to backend
+      }
+
+      // 2. If Next.js route was not found (404) or failed, try FastAPI Backend
+      if (!res || !res.ok) {
+        try {
+          const backendRes = await fetch(`${API_URL}/api/user`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+          if (backendRes.ok || !res) {
+            res = backendRes;
+          }
+        } catch {
+          // If both fail, keep res for error handling
+        }
+      }
+
+      if (!res || !res.ok) {
         let errorMsg = "Failed to delete account";
         try {
-          const data = await res.json();
-          errorMsg = data.message || errorMsg;
+          if (res) {
+            const data = await res.json();
+            errorMsg = data.message || errorMsg;
+          }
         } catch { /* fallback */ }
         throw new Error(errorMsg);
       }
@@ -201,7 +228,7 @@ export default function SettingsPage() {
       await signOut("/login");
     } catch (err: any) {
       if (err.name === "TypeError" || err.message?.includes("fetch")) {
-        setDeleteError("Unable to connect to backend server. Please ensure the backend is running on port 8000.");
+        setDeleteError("Unable to connect to server. Please try again.");
       } else {
         setDeleteError(err.message || "Failed to delete account");
       }
