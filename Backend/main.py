@@ -1211,7 +1211,7 @@ def _register_routes(app: FastAPI) -> None:
 
             def _score_scheme(s: Scheme) -> int:
                 name = s.scheme_name.lower()
-                cat = s.scheme_category.lower()
+                cat = s.scheme_category.value.lower() if hasattr(s.scheme_category, "value") else str(s.scheme_category).lower()
                 summary = s.benefit_summary.lower()
                 combined = f"{name} {cat} {summary}"
                 score = 0
@@ -1240,7 +1240,8 @@ def _register_routes(app: FastAPI) -> None:
             if matched:
                 lines = []
                 for s in matched:
-                    parts = [f"- **{s.scheme_name}** (Category: {s.scheme_category})"]
+                    cat_name = s.scheme_category.value if hasattr(s.scheme_category, "value") else str(s.scheme_category)
+                    parts = [f"- **{s.scheme_name}** (Category: {cat_name})"]
                     parts.append(f"  Benefit: {s.benefit_summary}")
                     if s.benefit_value_estimate:
                         parts.append(f"  Estimated value: {s.benefit_value_estimate}")
@@ -1251,14 +1252,19 @@ def _register_routes(app: FastAPI) -> None:
                     if hasattr(s, 'eligibility_rules') and s.eligibility_rules:
                         rules = s.eligibility_rules
                         rule_parts = []
-                        if rules.min_age is not None and rules.min_age > 0:
-                            rule_parts.append(f"Min age: {rules.min_age}")
-                        if rules.max_age is not None and rules.max_age < 120:
-                            rule_parts.append(f"Max age: {rules.max_age}")
-                        if rules.max_income is not None and 0 < rules.max_income < 100000000:
-                            rule_parts.append(f"Max income: ₹{int(rules.max_income):,}")
-                        if rules.gender_restriction and str(rules.gender_restriction) != "any":
-                            rule_parts.append(f"Gender: {rules.gender_restriction}")
+                        min_age = getattr(rules, 'min_age', None)
+                        if min_age is not None and min_age > 0:
+                            rule_parts.append(f"Min age: {min_age}")
+                        max_age = getattr(rules, 'max_age', None)
+                        if max_age is not None and max_age < 120:
+                            rule_parts.append(f"Max age: {max_age}")
+                        max_income = getattr(rules, 'max_annual_income', None) or getattr(rules, 'max_income', None)
+                        if max_income is not None and 0 < max_income < 100000000:
+                            rule_parts.append(f"Max income: ₹{int(max_income):,}")
+                        gender = getattr(rules, 'gender_restricted_to', None) or getattr(rules, 'gender_restriction', None)
+                        gender_val = gender.value if hasattr(gender, "value") else str(gender)
+                        if gender_val and gender_val.lower() != "any":
+                            rule_parts.append(f"Gender: {gender_val}")
                         if rule_parts:
                             parts.append(f"  Eligibility: {'; '.join(rule_parts)}")
                     lines.append("\n".join(parts))

@@ -30,7 +30,12 @@ class GroqClient:
 
     @property
     def available(self) -> bool:
-        return bool(self._settings.llm_enabled and self._api_key)
+        return bool(
+            self._settings.llm_enabled
+            and self._api_key
+            and self._api_key != "your_groq_api_key_here"
+            and not str(self._api_key).startswith("your_")
+        )
 
     async def _generate_once(self, model: str, prompt: str) -> str | None:
         """One generation attempt against a specific Groq model, bounded by timeout."""
