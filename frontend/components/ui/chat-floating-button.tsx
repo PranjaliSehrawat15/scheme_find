@@ -19,7 +19,7 @@ export function ChatFloatingButton() {
     {
       role: "assistant",
       content:
-        "Namaste! **I am SchemeFind AI**, powered by Groq Llama-3.3-70B.\n\nAsk me anything about central or state welfare schemes right here, without leaving your page!",
+        "Namaste! **I am SchemeFind AI**, powered by Groq AI.\n\nAsk me anything about central or state welfare schemes right here, without leaving your page!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -74,7 +74,7 @@ export function ChatFloatingButton() {
       {
         role: "assistant",
         content:
-          "Namaste! **I am SchemeFind AI**, powered by Groq Llama-3.3-70B.\n\nAsk me anything about central or state welfare schemes right here, without leaving your page!",
+          "Namaste! **I am SchemeFind AI**, powered by Groq AI.\n\nAsk me anything about central or state welfare schemes right here, without leaving your page!",
       },
     ]);
   }
@@ -119,7 +119,7 @@ export function ChatFloatingButton() {
                   <span className="flex h-1.5 w-1.5 rounded-full bg-[#87A96B] animate-pulse" />
                 </div>
                 <p className="text-[11px] text-[#D5851F] font-medium leading-none">
-                  Groq Llama-3.3-70B Live
+                  Groq AI Live
                 </p>
               </div>
             </div>

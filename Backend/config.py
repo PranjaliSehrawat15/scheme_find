@@ -43,8 +43,8 @@ class Settings(BaseSettings):
 
     # --- LLM (Groq) — optional; the system degrades gracefully without it ---
     groq_api_key: str | None = Field(default=None)
-    groq_model: str = Field(default="llama-3.3-70b-versatile")
-    groq_fallback_model: str = Field(default="llama-3.1-8b-instant")
+    groq_model: str = Field(default="openai/gpt-oss-120b")
+    groq_fallback_model: str = Field(default="openai/gpt-oss-20b")
     groq_timeout_seconds: float = Field(default=10.0)
     llm_enabled: bool = Field(default=True)
 

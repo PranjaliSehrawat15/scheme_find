@@ -41,7 +41,7 @@ export default function ChatPage() {
     {
       role: "assistant",
       content:
-        "Namaste! **I am SchemeFind AI**, powered by Groq Llama-3.3-70B.\n\nAsk me anything about central or state welfare schemes — exact eligibility rules, required documents, application procedures, or benefit amounts. How can I assist you today?",
+        "Namaste! **I am SchemeFind AI**, powered by Groq AI.\n\nAsk me anything about central or state welfare schemes — exact eligibility rules, required documents, application procedures, or benefit amounts. How can I assist you today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -101,7 +101,7 @@ export default function ChatPage() {
       {
         role: "assistant",
         content:
-          "Namaste! **I am SchemeFind AI**, powered by Groq Llama-3.3-70B.\n\nAsk me anything about central or state welfare schemes — exact eligibility rules, required documents, application procedures, or benefit amounts. How can I assist you today?",
+          "Namaste! **I am SchemeFind AI**, powered by Groq AI.\n\nAsk me anything about central or state welfare schemes — exact eligibility rules, required documents, application procedures, or benefit amounts. How can I assist you today?",
       },
     ]);
   }
@@ -115,7 +115,7 @@ export default function ChatPage() {
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#D5851F]/20 border border-[#D5851F]/40 px-3 py-0.5 text-[11px] font-bold text-[#D5851F] backdrop-blur-sm">
               <span className="flex h-1.5 w-1.5 rounded-full bg-[#D5851F] animate-pulse" />
-              <span>SchemeFind AI • Groq Llama-3.3-70B Intelligence</span>
+              <span>SchemeFind AI • Groq AI Intelligence</span>
             </div>
             <h1 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-white">
               Welfare Scheme Q&A Advisor
