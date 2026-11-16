@@ -157,8 +157,8 @@ function AccordionItem({
       className={cn(
         "rounded-2xl border transition-all duration-300",
         isOpen
-          ? "border-[#D5851F]/50 bg-white/80 dark:bg-[#161311]/45 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-2xl dark:shadow-black/50 ring-1 ring-[#D5851F]/30"
-          : "border-ink-navy/10 dark:border-white/12 bg-white/45 dark:bg-[#14110E]/30 backdrop-blur-lg hover:bg-white/70 dark:hover:bg-[#181411]/45 hover:border-ink-navy/20 dark:hover:border-white/25 shadow-xs"
+          ? "border-[#D5851F]/40 bg-white dark:bg-[#181411]/95 dark:border-[#D5851F]/50 shadow-md dark:shadow-2xl dark:shadow-black/60 ring-1 ring-[#D5851F]/25 backdrop-blur-xl"
+          : "border-ink-navy/8 dark:border-white/10 bg-white/15 dark:bg-white/[0.02] backdrop-blur-[2px] hover:bg-white/35 dark:hover:bg-white/[0.06] hover:border-ink-navy/15 dark:hover:border-white/20 shadow-none"
       )}
     >
       <button
@@ -246,7 +246,7 @@ export function FAQ() {
         src="/assets/woman.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.20] dark:opacity-[0.48] dark:invert dark:brightness-135 dark:contrast-125 transition-opacity duration-300"
+        className="pointer-events-none absolute bottom-0 opacity-[0.25] dark:opacity-[0.60] dark:invert dark:brightness-140 dark:contrast-125 transition-opacity duration-300"
         style={{ right: "-2%", height: "110%", maxHeight: "820px" }}
       />
       {/* Labour image — high visibility illuminated chalk sketch in dark mode */}
@@ -255,7 +255,7 @@ export function FAQ() {
         src="/assets/labour.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.20] dark:opacity-[0.48] dark:invert dark:brightness-135 dark:contrast-125 transition-opacity duration-300"
+        className="pointer-events-none absolute bottom-0 opacity-[0.25] dark:opacity-[0.60] dark:invert dark:brightness-140 dark:contrast-125 transition-opacity duration-300"
         style={{ left: "-2%", height: "110%", maxHeight: "820px" }}
       />
       {/* Decorative animated SVGs on left side */}

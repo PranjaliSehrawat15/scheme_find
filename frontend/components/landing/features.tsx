@@ -146,7 +146,7 @@ export function Features() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="group rounded-2xl border border-ink-navy/10 dark:border-white/12 bg-white/45 dark:bg-[#14110E]/30 backdrop-blur-xl p-6 transition-all duration-300 hover:bg-white/70 dark:hover:bg-[#181411]/50 hover:border-ink-navy/20 dark:hover:border-[#D5851F]/45 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50 shadow-xs"
+              className="group rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white/30 dark:bg-white/[0.03] backdrop-blur-md p-6 transition-all duration-300 hover:bg-white/60 dark:hover:bg-white/[0.08] hover:border-ink-navy/20 dark:hover:border-[#D5851F]/45 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50 shadow-xs"
             >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15 dark:text-[#E8952B] shadow-2xs">
                 {f.icon}
