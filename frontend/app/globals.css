@@ -348,6 +348,37 @@ html.dark .bg-white {
   background-color: #1C1917 !important;
 }
 
+/* Page Gradients & Linear Surfaces (Neutralize light gradients in Dark Mode) */
+html.dark [class*="bg-gradient-to-b from-white to-warm-paper"],
+html.dark main.bg-gradient-to-b,
+html.dark .bg-gradient-to-b.from-white.to-warm-paper {
+  background-image: linear-gradient(to bottom, #161311, #12100E) !important;
+  background-color: #12100E !important;
+}
+
+html.dark [class*="bg-gradient-to-r from-[#FAF8F5] via-[#F4F7F1] to-white"],
+html.dark [class*="bg-gradient-to-r from-[#FAF8F5] via-white to-white"] {
+  background-image: linear-gradient(to right, #161311, #1A1714, #181512) !important;
+  background-color: #161311 !important;
+}
+
+html.dark .from-white {
+  --tw-gradient-from: #161311 !important;
+}
+
+html.dark .to-warm-paper {
+  --tw-gradient-to: #12100E !important;
+}
+
+html.dark .via-\[\#F4F7F1\] {
+  --tw-gradient-stops: var(--tw-gradient-from), #1A1714, var(--tw-gradient-to) !important;
+}
+
+/* Toggle switch knob stays crisp white */
+html.dark button[role="switch"] span.bg-white {
+  background-color: #FFFFFF !important;
+}
+
 /* Light tinted surfaces (slate-50, gray-50, warm-paper/50, etc.) */
 html.dark .bg-slate-50,
 html.dark .bg-gray-50,

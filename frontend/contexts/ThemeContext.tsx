@@ -47,59 +47,43 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = useCallback((dark: boolean) => {
     setIsDark(dark);
-    if (dark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (typeof document !== "undefined") {
+      if (dark) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
     try {
       const raw = localStorage.getItem(SETTINGS_KEY);
       const settings = raw ? JSON.parse(raw) : {};
       settings.darkMode = dark;
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-      window.dispatchEvent(new Event("schemefind_theme_change"));
     } catch {
       // Ignore localStorage write error
     }
+    // Defer dispatch so React finishes render pass cleanly
+    setTimeout(() => {
+      window.dispatchEvent(new Event("schemefind_theme_change"));
+    }, 10);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setIsDark((prev) => {
-      const next = !prev;
-      if (next) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-      try {
-        const raw = localStorage.getItem(SETTINGS_KEY);
-        const settings = raw ? JSON.parse(raw) : {};
-        settings.darkMode = next;
-        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-        window.dispatchEvent(new Event("schemefind_theme_change"));
-      } catch {
-        // Ignore
-      }
-      return next;
-    });
-  }, []);
+    // Read truth directly from DOM to avoid stale closure
+    const currentIsDark =
+      typeof document !== "undefined"
+        ? document.documentElement.classList.contains("dark")
+        : isDark;
+    const next = !currentIsDark;
+    setTheme(next);
+  }, [isDark, setTheme]);
 
   // Listen for sync from other tabs or other components
   useEffect(() => {
     const handleSync = () => {
       try {
-        const raw = localStorage.getItem(SETTINGS_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (typeof parsed.darkMode === "boolean") {
-            setIsDark(parsed.darkMode);
-            if (parsed.darkMode) {
-              document.documentElement.classList.add("dark");
-            } else {
-              document.documentElement.classList.remove("dark");
-            }
-          }
-        }
+        const isHtmlDark = document.documentElement.classList.contains("dark");
+        setIsDark(isHtmlDark);
       } catch {}
     };
 

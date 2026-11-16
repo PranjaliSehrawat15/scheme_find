@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/contexts/ThemeContext";
 import { API_URL } from "@/lib/api";
 
 const tabs = ["Notifications", "Appearance", "Privacy", "Account"];
@@ -85,8 +86,14 @@ export default function SettingsPage() {
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const { isDark, setTheme: setThemeContext } = useTheme();
   const { session, user, signOut } = useAuth();
   const [currentDevice, setCurrentDevice] = useState("Chrome on Windows");
+
+  // Keep settings.darkMode in sync with ThemeContext
+  useEffect(() => {
+    setSettings((prev) => ({ ...prev, darkMode: isDark }));
+  }, [isDark]);
 
   // ── Modal states ────────────────────────────────────────────────────
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -114,22 +121,17 @@ export default function SettingsPage() {
   useEffect(() => {
     const local = loadSettings();
     const cloud = user?.user_metadata?.preferences;
-    const effective = cloud ? { ...local, ...cloud } : local;
+    const base = cloud ? { ...local, ...cloud } : local;
+    const effective = { ...base, darkMode: isDark };
     setSettings(effective);
     setSettingsLoaded(true);
-
-    if (effective.darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
 
     if (effective.compactView) {
       document.documentElement.classList.add("compact-mode");
     } else {
       document.documentElement.classList.remove("compact-mode");
     }
-  }, [user]);
+  }, [user, isDark]);
 
   // ── Persist + apply side effects on change ──────────────────────────
   const updateSetting = useCallback(<K extends keyof Settings>(key: K, val: Settings[K]) => {
@@ -137,14 +139,9 @@ export default function SettingsPage() {
       const next = { ...prev, [key]: val };
       saveSettings(next);
 
-      // 1. Immediately toggle dark mode class
+      // 1. Immediately toggle dark mode via ThemeContext
       if (key === "darkMode") {
-        if (val) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-        window.dispatchEvent(new Event("schemefind_theme_change"));
+        setThemeContext(val as boolean);
       }
 
       // 2. Immediately toggle compact-mode class
@@ -171,22 +168,17 @@ export default function SettingsPage() {
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  }, [user]);
+  }, [user, setThemeContext]);
 
-  // Sync side effects
+  // Sync compact mode side effect
   useEffect(() => {
     if (!settingsLoaded) return;
-    if (settings.darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
     if (settings.compactView) {
       document.documentElement.classList.add("compact-mode");
     } else {
       document.documentElement.classList.remove("compact-mode");
     }
-  }, [settings.darkMode, settings.compactView, settingsLoaded]);
+  }, [settings.compactView, settingsLoaded]);
 
   // Export personal data package (DPDP Act / GDPR data portability)
   const handleExportData = async () => {
@@ -461,7 +453,7 @@ export default function SettingsPage() {
                 <h2 className="font-display text-lg font-semibold text-ink-navy">Appearance</h2>
                 <p className="mt-1 text-sm text-slate-blue">Customize how the dashboard looks.</p>
                 <div className="mt-5 space-y-3">
-                  <Toggle enabled={settings.darkMode} onChange={(v) => updateSetting("darkMode", v)} label="Dark mode" desc="Switch between light and dark theme" />
+                  <Toggle enabled={isDark} onChange={(v) => { setThemeContext(v); updateSetting("darkMode", v); }} label="Dark mode" desc="Switch between light and dark theme" />
                   <div>
                     <Toggle enabled={settings.compactView} onChange={(v) => updateSetting("compactView", v)} label="Compact view" desc="Show more content with reduced spacing across citizen workspace" />
                     {settings.compactView && (

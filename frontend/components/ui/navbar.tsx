@@ -196,7 +196,12 @@ export function Navbar() {
 
             {/* Theme Toggle Button */}
             <button
-              onClick={toggleTheme}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleTheme();
+              }}
               aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
               title={isDark ? "Switch to light mode" : "Switch to dark mode"}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-[#5A3E2B]/15 bg-[#FAF8F5] text-[#5A3E2B] hover:bg-[#5A3E2B]/10 hover:border-[#D5851F]/40 transition-all cursor-pointer shadow-xs active:scale-95"
