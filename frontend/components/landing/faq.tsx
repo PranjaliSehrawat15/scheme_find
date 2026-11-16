@@ -155,18 +155,18 @@ function AccordionItem({
   return (
     <div
       className={cn(
-        "rounded-xl border transition-colors",
+        "rounded-2xl border transition-all duration-300",
         isOpen
-          ? "border-ink-navy/15 bg-white shadow-sm dark:bg-[#221D19] dark:border-[#D5851F]/40 dark:shadow-lg dark:shadow-black/40"
-          : "border-ink-navy/8 bg-white/60 hover:bg-white hover:border-ink-navy/12 dark:bg-[#1A1613]/75 dark:backdrop-blur-md dark:border-white/10 dark:hover:bg-[#221D19]/90 dark:hover:border-white/20"
+          ? "border-[#D5851F]/50 bg-white/80 dark:bg-[#161311]/45 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-2xl dark:shadow-black/50 ring-1 ring-[#D5851F]/30"
+          : "border-ink-navy/10 dark:border-white/12 bg-white/45 dark:bg-[#14110E]/30 backdrop-blur-lg hover:bg-white/70 dark:hover:bg-[#181411]/45 hover:border-ink-navy/20 dark:hover:border-white/25 shadow-xs"
       )}
     >
       <button
         onClick={onClick}
-        className="flex w-full items-center gap-3 px-5 py-4 text-left cursor-pointer"
+        className="flex w-full items-center gap-3.5 px-6 py-4.5 text-left cursor-pointer"
         aria-expanded={isOpen}
       >
-        <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15 dark:text-[#E8952B]">
+        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15 dark:text-[#E8952B] shadow-2xs">
           {icon}
         </span>
         <span className="flex-1 text-sm font-semibold text-ink-navy sm:text-base dark:text-[#F0E6DA]">
@@ -192,7 +192,7 @@ function AccordionItem({
         className="overflow-hidden"
         style={{ height: 0, opacity: 0 }}
       >
-        <div className="border-t border-ink-navy/8 dark:border-white/10 px-5 pb-4 pt-3">
+        <div className="border-t border-ink-navy/8 dark:border-white/10 px-6 pb-5 pt-3.5">
           <p className="text-sm leading-relaxed text-slate-blue dark:text-[#C7B8AA]">{faq.a}</p>
         </div>
       </div>
@@ -236,31 +236,35 @@ export function FAQ() {
 
   return (
     <section className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper dark:bg-[#0E0C0A] py-20 sm:py-28">
-      {/* Woman image — preserved and illuminated as fine chalk sketch in dark mode */}
+      {/* Ambient glow orbs that illuminate the pencil sketches */}
+      <div className="pointer-events-none absolute -left-20 top-1/4 h-96 w-96 rounded-full bg-[#D5851F]/15 blur-3xl dark:bg-[#D5851F]/20" />
+      <div className="pointer-events-none absolute -right-20 top-1/3 h-96 w-96 rounded-full bg-[#87A96B]/15 blur-3xl dark:bg-[#87A96B]/20" />
+
+      {/* Woman image — high visibility illuminated chalk sketch in dark mode */}
       <img
         ref={womanRef}
         src="/assets/woman.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.22] dark:invert dark:brightness-110"
-        style={{ right: "-5%", height: "110%", maxHeight: "780px" }}
+        className="pointer-events-none absolute bottom-0 opacity-[0.20] dark:opacity-[0.48] dark:invert dark:brightness-135 dark:contrast-125 transition-opacity duration-300"
+        style={{ right: "-2%", height: "110%", maxHeight: "820px" }}
       />
-      {/* Labour image — preserved and illuminated as fine chalk sketch in dark mode */}
+      {/* Labour image — high visibility illuminated chalk sketch in dark mode */}
       <img
         ref={labourRef}
         src="/assets/labour.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.22] dark:invert dark:brightness-110"
-        style={{ left: "-5%", height: "110%", maxHeight: "780px" }}
+        className="pointer-events-none absolute bottom-0 opacity-[0.20] dark:opacity-[0.48] dark:invert dark:brightness-135 dark:contrast-125 transition-opacity duration-300"
+        style={{ left: "-2%", height: "110%", maxHeight: "820px" }}
       />
       {/* Decorative animated SVGs on left side */}
       <div className="pointer-events-none absolute inset-0">
-        <span className="absolute left-[6%] top-[8%] scale-[2.5] animate-breathe text-signal-orange/15 dark:text-signal-orange/25">{icons.home}</span>
-        <span className="absolute left-[4%] top-[40%] scale-[2] animate-[float_6s_ease-in-out_infinite] text-ink-navy/10 dark:text-white/10">{icons.hands}</span>
-        <span className="absolute left-[8%] bottom-[18%] scale-[2.5] animate-pulse text-signal-orange/10 dark:text-signal-orange/20" style={{ animationDuration: "3s" }}>{icons.education}</span>
-        <span className="absolute left-[40%] top-[3%] scale-[2] animate-[float_8s_ease-in-out_infinite_1s] text-signal-orange/10 dark:text-signal-orange/20">{icons.womanchild}</span>
-        <span className="absolute left-[2%] top-[68%] scale-[1.8] animate-breathe text-ink-navy/8 dark:text-white/10">{icons.farmer}</span>
+        <span className="absolute left-[6%] top-[8%] scale-[2.5] animate-breathe text-signal-orange/15 dark:text-signal-orange/30">{icons.home}</span>
+        <span className="absolute left-[4%] top-[40%] scale-[2] animate-[float_6s_ease-in-out_infinite] text-ink-navy/10 dark:text-white/15">{icons.hands}</span>
+        <span className="absolute left-[8%] bottom-[18%] scale-[2.5] animate-pulse text-signal-orange/10 dark:text-signal-orange/25" style={{ animationDuration: "3s" }}>{icons.education}</span>
+        <span className="absolute left-[40%] top-[3%] scale-[2] animate-[float_8s_ease-in-out_infinite_1s] text-signal-orange/10 dark:text-signal-orange/25">{icons.womanchild}</span>
+        <span className="absolute left-[2%] top-[68%] scale-[1.8] animate-breathe text-ink-navy/8 dark:text-white/15">{icons.farmer}</span>
       </div>
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">

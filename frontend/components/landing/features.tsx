@@ -101,9 +101,9 @@ export function Features() {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper dark:bg-[#0E0C0A] py-20 sm:py-28">
-      {/* Background artwork: bottom-waves.svg preserved in dark mode with luminous night shading */}
+      {/* Background artwork: bottom-waves.svg for light mode */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-100 dark:opacity-35 dark:invert dark:hue-rotate-180 dark:contrast-125"
+        className="pointer-events-none absolute inset-0 opacity-100 dark:hidden"
         style={{
           backgroundImage: "url('/assets/bottom-waves.svg')",
           backgroundSize: "cover",
@@ -111,10 +111,23 @@ export function Features() {
           backgroundRepeat: "no-repeat",
         }}
       />
+      {/* Background artwork: bottom-waves-dark.svg with rich night tones and high visibility */}
+      <div
+        className="pointer-events-none absolute inset-0 hidden dark:block opacity-90"
+        style={{
+          backgroundImage: "url('/assets/bottom-waves-dark.svg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
       {/* Light mode gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 dark:hidden" />
-      {/* Dark mode gradient overlay — subtle vignette that preserves the artwork curves */}
-      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/60 via-transparent to-[#0E0C0A]/70" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 dark:hidden pointer-events-none" />
+      {/* Dark mode subtle ambient vignette */}
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/60 via-transparent to-[#0E0C0A]/50 pointer-events-none" />
+      {/* Ambient glowing orbs behind the waves */}
+      <div className="pointer-events-none absolute left-10 top-1/2 h-80 w-80 rounded-full bg-[#0284C7]/15 blur-3xl dark:bg-[#0284C7]/20" />
+      <div className="pointer-events-none absolute right-1/4 bottom-10 h-72 w-72 rounded-full bg-[#D5851F]/15 blur-3xl dark:bg-[#D5851F]/20" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
@@ -133,9 +146,9 @@ export function Features() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="group rounded-xl border border-ink-navy/8 bg-warm-paper/50 p-6 transition-all hover:border-ink-navy/15 hover:shadow-sm dark:border-white/10 dark:bg-[#1A1613]/75 dark:backdrop-blur-md dark:hover:border-[#D5851F]/40 dark:hover:bg-[#221D19]/90 dark:shadow-md dark:shadow-black/20"
+              className="group rounded-2xl border border-ink-navy/10 dark:border-white/12 bg-white/45 dark:bg-[#14110E]/30 backdrop-blur-xl p-6 transition-all duration-300 hover:bg-white/70 dark:hover:bg-[#181411]/50 hover:border-ink-navy/20 dark:hover:border-[#D5851F]/45 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50 shadow-xs"
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15 dark:text-[#E8952B]">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15 dark:text-[#E8952B] shadow-2xs">
                 {f.icon}
               </div>
               <h3 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">{f.title}</h3>
