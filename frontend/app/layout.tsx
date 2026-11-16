@@ -64,6 +64,11 @@ export default function RootLayout({
                     } else {
                       document.documentElement.classList.remove('dark');
                     }
+                    if (s && s.compactView) {
+                      document.documentElement.classList.add('compact-mode');
+                    } else {
+                      document.documentElement.classList.remove('compact-mode');
+                    }
                   } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     document.documentElement.classList.add('dark');
                   }

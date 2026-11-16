@@ -50,6 +50,7 @@ function saveSettings(s: Settings) {
   if (typeof window === "undefined") return;
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
   window.dispatchEvent(new Event("schemefind_theme_change"));
+  window.dispatchEvent(new Event("schemefind_settings_change"));
 }
 
 function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange: (v: boolean) => void; label: string; desc: string }) {
@@ -107,34 +108,72 @@ export default function SettingsPage() {
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [deleteError, setDeleteError] = useState("");
 
+  const [exporting, setExporting] = useState(false);
+
   // ── Load persisted settings ─────────────────────────────────────────
   useEffect(() => {
-    setSettings(loadSettings());
+    const local = loadSettings();
+    const cloud = user?.user_metadata?.preferences;
+    const effective = cloud ? { ...local, ...cloud } : local;
+    setSettings(effective);
     setSettingsLoaded(true);
 
-    const handleSync = () => {
-      setSettings(loadSettings());
-    };
-    window.addEventListener("schemefind_theme_change", handleSync);
-    window.addEventListener("storage", handleSync);
-    return () => {
-      window.removeEventListener("schemefind_theme_change", handleSync);
-      window.removeEventListener("storage", handleSync);
-    };
-  }, []);
+    if (effective.darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    if (effective.compactView) {
+      document.documentElement.classList.add("compact-mode");
+    } else {
+      document.documentElement.classList.remove("compact-mode");
+    }
+  }, [user]);
 
   // ── Persist + apply side effects on change ──────────────────────────
   const updateSetting = useCallback(<K extends keyof Settings>(key: K, val: Settings[K]) => {
     setSettings((prev) => {
       const next = { ...prev, [key]: val };
       saveSettings(next);
+
+      // 1. Immediately toggle dark mode class
+      if (key === "darkMode") {
+        if (val) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+        window.dispatchEvent(new Event("schemefind_theme_change"));
+      }
+
+      // 2. Immediately toggle compact-mode class
+      if (key === "compactView") {
+        if (val) {
+          document.documentElement.classList.add("compact-mode");
+        } else {
+          document.documentElement.classList.remove("compact-mode");
+        }
+      }
+
+      // 3. Sync to Supabase user cloud metadata if logged in
+      if (user?.id) {
+        import("@/lib/supabase").then(({ supabase }) => {
+          if (supabase) {
+            supabase.auth.updateUser({
+              data: { preferences: next },
+            }).catch(() => {});
+          }
+        });
+      }
+
       return next;
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  }, []);
+  }, [user]);
 
-  // Apply dark mode to <html>
+  // Sync side effects
   useEffect(() => {
     if (!settingsLoaded) return;
     if (settings.darkMode) {
@@ -142,7 +181,57 @@ export default function SettingsPage() {
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [settings.darkMode, settingsLoaded]);
+    if (settings.compactView) {
+      document.documentElement.classList.add("compact-mode");
+    } else {
+      document.documentElement.classList.remove("compact-mode");
+    }
+  }, [settings.darkMode, settings.compactView, settingsLoaded]);
+
+  // Export personal data package (DPDP Act / GDPR data portability)
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const { supabase } = await import("@/lib/supabase");
+      if (!supabase || !user) throw new Error("No active authenticated session.");
+
+      const [profileRes, matchesRes, docsRes] = await Promise.all([
+        supabase.from("citizen_profiles").select("*").eq("user_id", user.id),
+        supabase.from("eligibility_matches").select("*").eq("user_id", user.id),
+        supabase.from("documents").select("id, document_type, ocr_status, created_at").eq("user_id", user.id),
+      ]);
+
+      const exportBundle = {
+        title: "SchemeFind Personal Data Archive",
+        exportDate: new Date().toISOString(),
+        user: {
+          id: user.id,
+          email: user.email,
+          lastSignIn: user.last_sign_in_at,
+        },
+        citizenProfile: profileRes.data || [],
+        matchedSchemes: matchesRes.data || [],
+        uploadedDocuments: docsRes.data || [],
+        preferences: settings,
+      };
+
+      const blob = new Blob([JSON.stringify(exportBundle, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `schemefind-archive-${user.email?.split("@")[0] || "user"}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      alert("Export failed: " + (err.message || "Unknown error"));
+    } finally {
+      setExporting(false);
+    }
+  };
 
   // ── Browser/OS detection ────────────────────────────────────────────
   useEffect(() => {
@@ -322,7 +411,7 @@ export default function SettingsPage() {
           {/* Saved toast */}
           {saved && (
             <div className="mt-4 flex items-center gap-2 rounded-xl bg-teal-50 border border-teal-100 px-4 py-2.5 text-xs font-semibold text-teal-700 animate-in fade-in slide-in-from-top-2 duration-300">
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7" /></svg>
               Settings saved
             </div>
           )}
@@ -373,47 +462,95 @@ export default function SettingsPage() {
                 <p className="mt-1 text-sm text-slate-blue">Customize how the dashboard looks.</p>
                 <div className="mt-5 space-y-3">
                   <Toggle enabled={settings.darkMode} onChange={(v) => updateSetting("darkMode", v)} label="Dark mode" desc="Switch between light and dark theme" />
-                  <Toggle enabled={settings.compactView} onChange={(v) => updateSetting("compactView", v)} label="Compact view" desc="Show more content with reduced spacing" />
+                  <div>
+                    <Toggle enabled={settings.compactView} onChange={(v) => updateSetting("compactView", v)} label="Compact view" desc="Show more content with reduced spacing across citizen workspace" />
+                    {settings.compactView && (
+                      <div className="mt-2.5 flex items-center gap-2 rounded-lg bg-signal-orange/10 px-3.5 py-2 text-xs font-semibold text-signal-orange border border-signal-orange/20 animate-in fade-in">
+                        <span className="w-1.5 h-1.5 rounded-full bg-signal-orange animate-pulse" />
+                        Compact view active: Denser cards, reduced padding & optimized workspace layout.
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="mt-5 border-t border-ink-navy/10 pt-5">
                   <p className="text-sm font-medium text-ink-navy">Language</p>
-                  <p className="mt-1 text-xs text-slate-blue-400">Choose your preferred language for scheme information.</p>
+                  <p className="mt-1 text-xs text-slate-blue-400">Choose your preferred language for scheme information and AI Assistant.</p>
                   <select
                     value={settings.language}
                     onChange={(e) => updateSetting("language", e.target.value)}
                     className="mt-3 block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none"
                   >
                     <option value="en">English</option>
-                    <option value="hi">Hindi</option>
-                    <option value="or">Odia</option>
-                    <option value="ta">Tamil</option>
-                    <option value="bn">Bengali</option>
-                    <option value="mr">Marathi</option>
-                    <option value="te">Telugu</option>
-                    <option value="kn">Kannada</option>
+                    <option value="hi">Hindi (हिंदी)</option>
+                    <option value="or">Odia (ଓଡ଼ିଆ)</option>
+                    <option value="ta">Tamil (தமிழ்)</option>
+                    <option value="bn">Bengali (বাংলা)</option>
+                    <option value="mr">Marathi (मराठी)</option>
+                    <option value="te">Telugu (తెలుగు)</option>
+                    <option value="kn">Kannada (ಕನ್ನಡ)</option>
                   </select>
+                  <p className="mt-2 text-xs text-slate-blue-400">
+                    Scheme summaries and SchemeFind AI responses will adapt to this language.
+                  </p>
                 </div>
               </div>
             )}
 
             {/* ── Privacy tab ───────────────────────────────────────────── */}
             {tab === 2 && (
-              <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                <h2 className="font-display text-lg font-semibold text-ink-navy">Privacy & data</h2>
-                <p className="mt-1 text-sm text-slate-blue">Control how your data is used and shared.</p>
-                <div className="mt-5 space-y-3">
-                  <Toggle enabled={settings.shareData} onChange={(v) => updateSetting("shareData", v)} label="Scheme improvement data" desc="Share anonymized eligibility data to improve scheme matching for everyone" />
-                  <Toggle enabled={settings.analytics} onChange={(v) => updateSetting("analytics", v)} label="Usage analytics" desc="Help us improve by sharing anonymous usage data" />
-                </div>
-                <div className="mt-5 rounded-xl bg-verified-teal/5 px-4 py-3">
-                  <div className="flex items-start gap-3">
-                    <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-verified-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                      <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <div>
-                      <p className="text-sm font-medium text-verified-teal">Your data is encrypted</p>
-                      <p className="mt-0.5 text-xs text-slate-blue">All personal information is encrypted at rest and in transit. We never share your data with third parties.</p>
+              <div className="space-y-5">
+                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy">Privacy & data</h2>
+                  <p className="mt-1 text-sm text-slate-blue">Control how your data is used, stored, and shared.</p>
+                  <div className="mt-5 space-y-3">
+                    <Toggle enabled={settings.shareData} onChange={(v) => updateSetting("shareData", v)} label="Scheme improvement data" desc="Share anonymized eligibility data to improve scheme matching accuracy" />
+                    <Toggle enabled={settings.analytics} onChange={(v) => updateSetting("analytics", v)} label="Usage analytics" desc="Help us improve platform stability with anonymous performance metrics" />
+                  </div>
+                  <div className="mt-5 rounded-xl bg-verified-teal/5 px-4 py-3">
+                    <div className="flex items-start gap-3">
+                      <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-verified-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                      <div>
+                        <p className="text-sm font-medium text-verified-teal">Your data is encrypted & sovereign</p>
+                        <p className="mt-0.5 text-xs text-slate-blue">All citizen profile records and documents are stored with AES-256 encryption. We never sell your data to third parties.</p>
+                      </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Data Portability / Export */}
+                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy">Data Portability</h2>
+                  <p className="mt-1 text-sm text-slate-blue">Download a complete copy of all your citizen profile records, matched schemes, and preferences.</p>
+                  <div className="mt-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleExportData}
+                      disabled={exporting}
+                      className="border-ink-navy/20 text-ink-navy hover:bg-warm-paper"
+                    >
+                      {exporting ? (
+                        <>
+                          <svg className="h-4 w-4 animate-spin mr-2" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Generating Archive...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                          Download Personal Data Archive (JSON)
+                        </>
+                      )}
+                    </Button>
+                    <p className="mt-2 text-xs text-slate-blue-400">
+                      Standard JSON format compliant with DPDP Act 2023 citizen rights.
+                    </p>
                   </div>
                 </div>
               </div>
