@@ -13,6 +13,10 @@ export function ConfidenceBadge({
   showLabel?: boolean;
   className?: string;
 }) {
+  // Automatically normalize decimal scores (e.g. 0.92 -> 92) so it never displays "0.92%"
+  const normalizedScore =
+    score > 0 && score <= 1 ? Math.round(score * 100) : Math.round(score || 0);
+
   const getStyle = (s: number) => {
     if (s >= 75) return "bg-[#87A96B]/15 text-[#3D522D] border-[#87A96B]/35 font-bold";
     if (s >= 50) return "bg-[#D5851F]/15 text-[#92520B] border-[#D5851F]/35 font-bold";
@@ -22,11 +26,11 @@ export function ConfidenceBadge({
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border ${getStyle(
-        score
-      )}`}
+        normalizedScore
+      )} ${className}`}
     >
       <span className="w-1.5 h-1.5 rounded-full bg-current" />
-      {score}% Match
+      {normalizedScore}% Match
     </span>
   );
 }
