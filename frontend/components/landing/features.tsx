@@ -100,9 +100,10 @@ export function Features() {
   ];
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper py-20 sm:py-28">
+    <section ref={sectionRef} className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper dark:bg-[#0E0C0A] py-20 sm:py-28">
+      {/* Background artwork: bottom-waves.svg preserved in dark mode with luminous night shading */}
       <div
-        className="pointer-events-none absolute inset-0 dark:opacity-10 dark:invert"
+        className="pointer-events-none absolute inset-0 opacity-100 dark:opacity-45 dark:[filter:invert(0.92)_hue-rotate(195deg)_brightness(0.65)]"
         style={{
           backgroundImage: "url('/assets/bottom-waves.svg')",
           backgroundSize: "cover",
@@ -110,14 +111,17 @@ export function Features() {
           backgroundRepeat: "no-repeat",
         }}
       />
+      {/* Light mode gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 dark:hidden" />
-      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/90 via-[#0E0C0A]/70 to-[#0E0C0A]" />
+      {/* Dark mode gradient overlay — preserves the artwork curves while maintaining high text contrast */}
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/75 via-[#0E0C0A]/35 to-[#0E0C0A]/80" />
+
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-navy sm:text-4xl">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA] sm:text-4xl">
             Built for discovery, not bureaucracy
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-slate-blue">
+          <p className="mt-3 text-base leading-relaxed text-slate-blue dark:text-[#C7B8AA]">
             Every feature exists to remove the gap between &ldquo;I might qualify&rdquo; and &ldquo;I have applied.&rdquo;
           </p>
         </div>
@@ -129,13 +133,13 @@ export function Features() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="group rounded-xl border border-ink-navy/8 bg-warm-paper/50 p-6 transition-all hover:border-ink-navy/15 hover:shadow-sm dark:border-white/10 dark:bg-[#1A1714] dark:hover:border-[#D5851F]/30"
+              className="group rounded-xl border border-ink-navy/8 bg-warm-paper/50 p-6 transition-all hover:border-ink-navy/15 hover:shadow-sm dark:border-white/10 dark:bg-[#1A1613]/75 dark:backdrop-blur-md dark:hover:border-[#D5851F]/40 dark:hover:bg-[#221D19]/90 dark:shadow-md dark:shadow-black/20"
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15 dark:text-[#E8952B]">
                 {f.icon}
               </div>
-              <h3 className="font-display text-lg font-semibold text-ink-navy">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-blue">{f.description}</p>
+              <h3 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-blue dark:text-[#C7B8AA]">{f.description}</p>
             </div>
           ))}
         </div>
