@@ -10,15 +10,15 @@ const PAGE_SIZE = 60;
 
 function SchemeCardSkeleton() {
   return (
-    <div className="animate-pulse rounded-2xl border border-slate-100 bg-white p-5 shadow-sm border-l-4 border-l-slate-200">
+    <div className="animate-pulse rounded-2xl border border-slate-100 dark:border-white/10 bg-white dark:bg-[#161311] p-5 shadow-sm border-l-4 border-l-slate-200 dark:border-l-white/20">
       <div className="flex items-start justify-between mb-3">
-        <div className="h-5 w-20 rounded-full bg-slate-100" />
-        <div className="h-4 w-28 rounded bg-slate-100" />
+        <div className="h-5 w-20 rounded-full bg-slate-100 dark:bg-white/10" />
+        <div className="h-4 w-28 rounded bg-slate-100 dark:bg-white/10" />
       </div>
-      <div className="h-5 w-4/5 rounded bg-slate-100 mb-2" />
-      <div className="h-4 w-full rounded bg-slate-100 mb-1" />
-      <div className="h-4 w-3/4 rounded bg-slate-100 mb-3" />
-      <div className="h-4 w-24 rounded bg-slate-100" />
+      <div className="h-5 w-4/5 rounded bg-slate-100 dark:bg-white/10 mb-2" />
+      <div className="h-4 w-full rounded bg-slate-100 dark:bg-white/10 mb-1" />
+      <div className="h-4 w-3/4 rounded bg-slate-100 dark:bg-white/10 mb-3" />
+      <div className="h-4 w-24 rounded bg-slate-100 dark:bg-white/10" />
     </div>
   );
 }
@@ -134,7 +134,7 @@ export default function SchemesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5]">
+    <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#0E0C0A]">
       {/* ── Hero Header ──────────────────────────────────────────────── */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#4A3222] via-[#5A3E2B] to-[#38261A]">
         <div className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-[#D5851F]/20 blur-3xl" />
@@ -203,14 +203,14 @@ export default function SchemesPage() {
       </div>
 
       {/* ── Category filter strip ──────────────────────────────────────── */}
-      <div className="sticky top-[64px] z-30 border-b border-[#5A3E2B]/10 bg-[#FAF8F5]/95 backdrop-blur-md shadow-sm">
+      <div className="sticky top-[64px] z-30 border-b border-[#5A3E2B]/10 dark:border-white/10 bg-[#FAF8F5]/95 dark:bg-[#12100E]/95 backdrop-blur-md shadow-sm">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative">
           
           {/* Left scroll arrow */}
           {showLeft && (
             <button
               onClick={() => scrollByAmount(-240)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#5A3E2B]/15 bg-white/90 shadow-md backdrop-blur hover:bg-white transition-all text-[#5A3E2B] hover:scale-105 active:scale-95"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#5A3E2B]/15 dark:border-white/15 bg-white/90 dark:bg-[#1A1613] shadow-md backdrop-blur hover:bg-white dark:hover:bg-[#221D19] transition-all text-[#5A3E2B] dark:text-[#F0E6DA] hover:scale-105 active:scale-95"
               aria-label="Scroll left"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M15 19l-7-7 7-7"/></svg>
@@ -232,9 +232,9 @@ export default function SchemesPage() {
                     "flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all whitespace-nowrap",
                     isActive
                       ? cat.key === "all"
-                        ? "border-[#5A3E2B] bg-[#5A3E2B] text-white shadow-md"
+                        ? "border-[#5A3E2B] bg-[#5A3E2B] text-white shadow-md dark:bg-[#D5851F] dark:border-[#D5851F]"
                         : `${cat.badge} border-transparent shadow-md ring-1 ring-current/30`
-                      : "border-[#5A3E2B]/15 bg-white text-[#5A3E2B]/80 hover:border-[#5A3E2B]/30 hover:bg-[#FAF8F5]"
+                      : "border-[#5A3E2B]/15 bg-white text-[#5A3E2B]/80 hover:border-[#5A3E2B]/30 hover:bg-[#FAF8F5] dark:border-white/10 dark:bg-[#1A1613] dark:text-[#C7B8AA] dark:hover:border-white/20 dark:hover:bg-[#221D19] dark:hover:text-[#F0E6DA]"
                   )}
                 >
                   <span>{cat.icon}</span>
@@ -242,7 +242,7 @@ export default function SchemesPage() {
                   {count > 0 && (
                     <span className={cn(
                       "rounded-full px-1.5 py-0.5 text-[10px] font-bold",
-                      isActive ? "bg-black/15" : "bg-[#5A3E2B]/10 text-[#5A3E2B]"
+                      isActive ? "bg-black/15" : "bg-[#5A3E2B]/10 text-[#5A3E2B] dark:bg-white/10 dark:text-[#E8DCCF]"
                     )}>
                       {count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count}
                     </span>
@@ -256,7 +256,7 @@ export default function SchemesPage() {
           {showRight && (
             <button
               onClick={() => scrollByAmount(240)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#5A3E2B]/15 bg-white/90 shadow-md backdrop-blur hover:bg-white transition-all text-[#5A3E2B] hover:scale-105 active:scale-95"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#5A3E2B]/15 dark:border-white/15 bg-white/90 dark:bg-[#1A1613] shadow-md backdrop-blur hover:bg-white dark:hover:bg-[#221D19] transition-all text-[#5A3E2B] dark:text-[#F0E6DA] hover:scale-105 active:scale-95"
               aria-label="Scroll right"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M9 5l7 7-7 7"/></svg>
@@ -272,16 +272,16 @@ export default function SchemesPage() {
         {/* Result count row */}
         {!loading && (
           <div className="mb-5 flex items-center justify-between">
-            <p className="text-sm font-semibold text-[#5A3E2B]/70">
-              Showing <span className="text-[#5A3E2B] font-bold">{visible.length.toLocaleString()}</span>
+            <p className="text-sm font-semibold text-[#5A3E2B]/70 dark:text-[#C7B8AA]">
+              Showing <span className="text-[#5A3E2B] dark:text-[#F0E6DA] font-bold">{visible.length.toLocaleString()}</span>
               {" "}of{" "}
-              <span className="text-[#5A3E2B] font-bold">{filtered.length.toLocaleString()}</span> schemes
-              {debouncedSearch && <span className="text-[#5A3E2B]/50"> for "<span className="italic">{debouncedSearch}</span>"</span>}
+              <span className="text-[#5A3E2B] dark:text-[#F0E6DA] font-bold">{filtered.length.toLocaleString()}</span> schemes
+              {debouncedSearch && <span className="text-[#5A3E2B]/50 dark:text-[#A8988B]"> for "<span className="italic">{debouncedSearch}</span>"</span>}
             </p>
             {(debouncedSearch || category !== "all") && (
               <button
                 onClick={() => { setSearch(""); setCategory("all"); }}
-                className="flex items-center gap-1.5 rounded-lg border border-[#5A3E2B]/15 bg-white px-3 py-1.5 text-xs font-semibold text-[#5A3E2B] hover:bg-[#FAF8F5] transition-all"
+                className="flex items-center gap-1.5 rounded-lg border border-[#5A3E2B]/15 dark:border-white/15 bg-white dark:bg-[#1A1613] px-3 py-1.5 text-xs font-semibold text-[#5A3E2B] dark:text-[#F0E6DA] hover:bg-[#FAF8F5] dark:hover:bg-[#221D19] transition-all cursor-pointer"
               >
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M6 18L18 6M6 6l12 12"/></svg>
                 Clear filters
@@ -296,17 +296,17 @@ export default function SchemesPage() {
             {Array.from({ length: 18 }).map((_, i) => <SchemeCardSkeleton key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-[#5A3E2B]/20 bg-white p-16 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAF8F5]">
-              <svg className="h-7 w-7 text-[#5A3E2B]/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <div className="rounded-2xl border-2 border-dashed border-[#5A3E2B]/20 dark:border-white/15 bg-white dark:bg-[#161311] p-16 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAF8F5] dark:bg-[#221D19]">
+              <svg className="h-7 w-7 text-[#5A3E2B]/40 dark:text-[#C7B8AA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             </div>
-            <p className="text-lg font-bold text-[#5A3E2B]">No schemes found</p>
-            <p className="mt-1 text-sm text-[#5A3E2B]/60 max-w-sm mx-auto">
+            <p className="text-lg font-bold text-[#5A3E2B] dark:text-[#F0E6DA]">No schemes found</p>
+            <p className="mt-1 text-sm text-[#5A3E2B]/60 dark:text-[#C7B8AA] max-w-sm mx-auto">
               Try adjusting your search terms or selecting a different category.
             </p>
             <button
               onClick={() => { setSearch(""); setCategory("all"); }}
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#D5851F] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#B86C14] transition-all shadow-lg shadow-[#D5851F]/20"
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#D5851F] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#B86C14] transition-all shadow-lg shadow-[#D5851F]/20 cursor-pointer"
             >
               Clear all filters
             </button>
@@ -321,8 +321,8 @@ export default function SchemesPage() {
                     key={s.scheme_id}
                     href={`/schemes/${s.scheme_id}`}
                     className={cn(
-                      "group flex flex-col rounded-2xl border border-[#5A3E2B]/10 border-l-4 bg-white p-5 shadow-sm transition-all duration-200",
-                      "hover:shadow-lg hover:-translate-y-0.5 hover:border-[#5A3E2B]/20",
+                      "group flex flex-col rounded-2xl border border-[#5A3E2B]/10 dark:border-white/10 border-l-4 bg-white dark:bg-[#161311] p-5 shadow-sm transition-all duration-200",
+                      "hover:shadow-lg dark:hover:shadow-black/40 hover:-translate-y-0.5 hover:border-[#5A3E2B]/20 dark:hover:border-white/20 dark:hover:bg-[#1C1815]",
                       cs.border, cs.glow
                     )}
                   >
@@ -333,26 +333,26 @@ export default function SchemesPage() {
                         <span>{cs.label}</span>
                       </span>
                       {s.benefit_value_estimate && (
-                        <span className="shrink-0 text-[11px] font-bold text-[#3D522D] bg-[#87A96B]/15 rounded-full px-2 py-0.5 border border-[#87A96B]/30">
+                        <span className="shrink-0 text-[11px] font-bold text-[#3D522D] dark:text-[#A7D18C] bg-[#87A96B]/15 dark:bg-[#87A96B]/20 rounded-full px-2 py-0.5 border border-[#87A96B]/30 dark:border-[#87A96B]/40">
                           {s.benefit_value_estimate.length > 18 ? s.benefit_value_estimate.slice(0, 18) + "…" : s.benefit_value_estimate}
                         </span>
                       )}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-sm font-bold leading-snug text-[#5A3E2B] group-hover:text-[#D5851F] transition-colors line-clamp-2 mb-1.5">
+                    <h3 className="text-sm font-bold leading-snug text-[#5A3E2B] dark:text-[#F0E6DA] group-hover:text-[#D5851F] dark:group-hover:text-[#E8952B] transition-colors line-clamp-2 mb-1.5">
                       {s.scheme_name}
                     </h3>
 
                     {/* Summary */}
-                    <p className="text-xs text-[#6E5748] leading-relaxed line-clamp-2 flex-1 mb-3">
+                    <p className="text-xs text-[#6E5748] dark:text-[#C7B8AA] leading-relaxed line-clamp-2 flex-1 mb-3">
                       {s.benefit_summary}
                     </p>
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-3 border-t border-[#5A3E2B]/10">
-                      <p className="text-[11px] text-[#5A3E2B]/50 truncate max-w-[75%]">{s.issuing_authority}</p>
-                      <svg className="h-4 w-4 shrink-0 text-[#5A3E2B]/40 group-hover:text-[#D5851F] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <div className="flex items-center justify-between pt-3 border-t border-[#5A3E2B]/10 dark:border-white/10">
+                      <p className="text-[11px] text-[#5A3E2B]/50 dark:text-[#A8988B] truncate max-w-[75%]">{s.issuing_authority}</p>
+                      <svg className="h-4 w-4 shrink-0 text-[#5A3E2B]/40 dark:text-[#C7B8AA] group-hover:text-[#D5851F] dark:group-hover:text-[#E8952B] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                         <path d="M9 18l6-6-6-6"/>
                       </svg>
                     </div>
@@ -364,12 +364,12 @@ export default function SchemesPage() {
             {/* Load more */}
             {hasMore && (
               <div className="mt-10 text-center">
-                <p className="text-sm text-[#5A3E2B]/70 mb-4">
+                <p className="text-sm text-[#5A3E2B]/70 dark:text-[#C7B8AA] mb-4">
                   Showing {visible.length.toLocaleString()} of {filtered.length.toLocaleString()} schemes
                 </p>
                 <button
                   onClick={loadMore}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-[#5A3E2B] hover:bg-[#483122] px-8 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#5A3E2B]/20 active:scale-95"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-[#5A3E2B] hover:bg-[#483122] dark:bg-[#D5851F] dark:hover:bg-[#B86C14] px-8 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#5A3E2B]/20 dark:shadow-black/40 active:scale-95 cursor-pointer"
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 5v14M5 12l7 7 7-7"/></svg>
                   Load {Math.min(PAGE_SIZE, filtered.length - visible.length).toLocaleString()} more schemes

@@ -45,15 +45,15 @@ function FAQItem({ q, a, idx }: { q: string; a: string; idx: number }) {
   }, [idx]);
 
   return (
-    <details ref={detailsRef} className="group rounded-xl border border-ink-navy/10 bg-white transition-all open:border-ink-navy/15 open:shadow-md hover:shadow-sm">
-      <summary className="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-semibold text-ink-navy sm:text-base">
+    <details ref={detailsRef} className="group rounded-xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] transition-all open:border-ink-navy/15 dark:open:border-[#D5851F]/40 open:shadow-md hover:shadow-sm">
+      <summary className="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-semibold text-ink-navy dark:text-[#F0E6DA] sm:text-base">
         {q}
-        <svg className="h-5 w-5 flex-shrink-0 text-slate-blue-400 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <svg className="h-5 w-5 flex-shrink-0 text-slate-blue-400 dark:text-[#C7B8AA] transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <path d="M6 9l6 6 6-6" />
         </svg>
       </summary>
-      <div ref={contentRef} className="border-t border-ink-navy/8 px-5 pb-4 pt-3">
-        <p className="text-sm leading-relaxed text-slate-blue">{a}</p>
+      <div ref={contentRef} className="border-t border-ink-navy/8 dark:border-white/10 px-5 pb-4 pt-3">
+        <p className="text-sm leading-relaxed text-slate-blue dark:text-[#C7B8AA]">{a}</p>
       </div>
     </details>
   );
@@ -76,22 +76,22 @@ export default function SupportPage() {
 
   return (
     <div ref={pageRef} className="flex min-h-screen flex-col">
-      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper">
+      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div className="sp-hero text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-signal-orange/20 to-signal-orange/5 ring-1 ring-signal-orange/20">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-signal-orange/20 to-signal-orange/5 dark:from-signal-orange/25 dark:to-signal-orange/10 ring-1 ring-signal-orange/20">
               <svg className="h-7 w-7 text-signal-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
                 <path d="M12 17h.01" />
               </svg>
             </div>
-            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-navy sm:text-4xl">Support & Help</h1>
-            <p className="mt-2 text-base text-slate-blue max-w-md mx-auto">Get help using SchemeFind, report scheme inaccuracies, or contact our team.</p>
+            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA] sm:text-4xl">Support & Help</h1>
+            <p className="mt-2 text-base text-slate-blue dark:text-[#C7B8AA] max-w-md mx-auto">Get help using SchemeFind, report scheme inaccuracies, or contact our team.</p>
           </div>
 
           <div className="mt-12">
-            <h2 className="font-display text-xl font-semibold text-ink-navy">Frequently asked questions</h2>
+            <h2 className="font-display text-xl font-semibold text-ink-navy dark:text-[#F0E6DA]">Frequently asked questions</h2>
             <div className="mt-4 space-y-3">
               {faqs.map((faq, i) => (
                 <FAQItem key={i} q={faq.q} a={faq.a} idx={i} />
@@ -100,22 +100,22 @@ export default function SupportPage() {
           </div>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            <div className="sp-card rounded-xl border border-ink-navy/10 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink-navy/5 text-ink-navy">
+            <div className="sp-card rounded-xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink-navy/5 dark:bg-white/5 text-ink-navy dark:text-[#F0E6DA]">
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
               </div>
-              <h3 className="mt-3 font-display text-lg font-semibold text-ink-navy">Email Support</h3>
-              <p className="mt-1 text-sm text-slate-blue">Encountering an issue or have a question about your account? Contact our team directly.</p>
+              <h3 className="mt-3 font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Email Support</h3>
+              <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Encountering an issue or have a question about your account? Contact our team directly.</p>
               <a href="mailto:support@schemefind.in" className="mt-3 inline-flex items-center text-sm font-semibold text-signal-orange hover:text-signal-orange-600 transition-colors">
                 support@schemefind.in →
               </a>
             </div>
-            <div className="sp-card rounded-xl border border-ink-navy/10 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink-navy/5 text-ink-navy">
+            <div className="sp-card rounded-xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink-navy/5 dark:bg-white/5 text-ink-navy dark:text-[#F0E6DA]">
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
               </div>
-              <h3 className="mt-3 font-display text-lg font-semibold text-ink-navy">Scheme Inquiries</h3>
-              <p className="mt-1 text-sm text-slate-blue">Notice an outdated scheme detail or eligibility rule? Send updates to our research team.</p>
+              <h3 className="mt-3 font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Scheme Inquiries</h3>
+              <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Notice an outdated scheme detail or eligibility rule? Send updates to our research team.</p>
               <a href="mailto:schemes@schemefind.in" className="mt-3 inline-flex items-center text-sm font-semibold text-signal-orange hover:text-signal-orange-600 transition-colors">
                 schemes@schemefind.in →
               </a>
@@ -123,9 +123,9 @@ export default function SupportPage() {
           </div>
 
           <div className="mt-8">
-            <div className="rounded-xl border border-ink-navy/10 bg-white px-5 py-4">
-              <p className="text-xs leading-relaxed text-slate-blue">
-                <strong className="text-ink-navy">Independent Platform Notice:</strong> SchemeFind is an independent eligibility discovery engine.
+            <div className="rounded-xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] px-5 py-4">
+              <p className="text-xs leading-relaxed text-slate-blue dark:text-[#C7B8AA]">
+                <strong className="text-ink-navy dark:text-[#F0E6DA]">Independent Platform Notice:</strong> SchemeFind is an independent eligibility discovery engine.
                 We do not collect fees or submit applications on behalf of citizens. For official approvals, disbursement status, or grievances,
                 please contact the respective ministry or state welfare department directly.
               </p>

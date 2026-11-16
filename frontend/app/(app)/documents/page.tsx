@@ -267,15 +267,15 @@ export default function DocumentsPage() {
 
   return (
     <div ref={pageRef} className="flex min-h-screen flex-col">
-      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper">
+      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
 
           {/* ── Header ── */}
           <div className="dc-hero">
-            <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy sm:text-3xl">
+            <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA] sm:text-3xl">
               Document Vault
             </h1>
-            <p className="mt-1 text-sm text-slate-blue">
+            <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">
               Upload once. We&apos;ll use these to verify eligibility and pre-fill your applications.
             </p>
           </div>
@@ -285,24 +285,24 @@ export default function DocumentsPage() {
             {[
               { label: "Uploaded",   value: String(uploadedCount), colorCls: "text-verified-teal" },
               { label: "Verified",   value: String(verifiedCount), colorCls: "text-signal-orange" },
-              { label: "Completion", value: `${completionPct}%`,   colorCls: "text-ink-navy" },
+              { label: "Completion", value: `${completionPct}%`,   colorCls: "text-ink-navy dark:text-[#F0E6DA]" },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-ink-navy/10 bg-white p-4 text-center shadow-sm">
+              <div key={stat.label} className="rounded-xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-4 text-center shadow-sm">
                 <p className={`text-2xl font-bold font-display ${stat.colorCls}`}>{stat.value}</p>
-                <p className="text-xs text-slate-blue-400 mt-0.5">{stat.label}</p>
+                <p className="text-xs text-slate-blue-400 dark:text-[#A8988B] mt-0.5">{stat.label}</p>
               </div>
             ))}
           </div>
 
           {/* ── Progress bar ── */}
           <div className="dc-hero mt-4">
-            <div className="h-1.5 w-full rounded-full bg-ink-navy/8 overflow-hidden">
+            <div className="h-1.5 w-full rounded-full bg-ink-navy/8 dark:bg-white/10 overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-signal-orange to-verified-teal transition-all duration-700"
                 style={{ width: `${completionPct}%` }}
               />
             </div>
-            <p className="mt-1 text-right text-xs text-slate-blue-400">
+            <p className="mt-1 text-right text-xs text-slate-blue-400 dark:text-[#A8988B]">
               {uploadedCount} of {DOCUMENT_TYPES.length} document types uploaded
             </p>
           </div>
@@ -311,11 +311,11 @@ export default function DocumentsPage() {
           {loadingDocs ? (
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {DOCUMENT_TYPES.map((dt) => (
-                <div key={dt.id} className="dc-card rounded-xl border-2 border-dashed border-ink-navy/10 bg-white p-5 animate-pulse">
-                  <div className="h-9 w-9 rounded-lg bg-slate-100" />
-                  <div className="mt-3 h-3.5 w-28 rounded bg-slate-100" />
-                  <div className="mt-1.5 h-2.5 w-36 rounded bg-slate-100" />
-                  <div className="mt-3 h-8 w-full rounded-lg bg-slate-100" />
+                <div key={dt.id} className="dc-card rounded-xl border-2 border-dashed border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-5 animate-pulse">
+                  <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-white/10" />
+                  <div className="mt-3 h-3.5 w-28 rounded bg-slate-100 dark:bg-white/10" />
+                  <div className="mt-1.5 h-2.5 w-36 rounded bg-slate-100 dark:bg-white/10" />
+                  <div className="mt-3 h-8 w-full rounded-lg bg-slate-100 dark:bg-white/10" />
                 </div>
               ))}
             </div>
@@ -332,14 +332,14 @@ export default function DocumentsPage() {
                     className={cn(
                       "dc-card rounded-xl border-2 transition-all duration-200",
                       existing
-                        ? `${colors.border} bg-white shadow-sm`
-                        : "border-dashed border-ink-navy/15 bg-white hover:border-signal-orange/40 hover:bg-signal-orange/[0.02] hover:shadow-sm"
+                        ? `${colors.border} bg-white dark:bg-[#161311] shadow-sm`
+                        : "border-dashed border-ink-navy/15 dark:border-white/10 bg-white dark:bg-[#161311] hover:border-signal-orange/40 hover:bg-signal-orange/[0.02] dark:hover:bg-white/5 hover:shadow-sm"
                     )}
                   >
                     <div className="p-5">
                       {/* Icon + status badge */}
                       <div className="flex items-center justify-between">
-                        <div className={cn("flex h-9 w-9 items-center justify-center rounded-lg", existing ? `${colors.bg} ${colors.text}` : "bg-warm-paper text-slate-blue-400")}>
+                        <div className={cn("flex h-9 w-9 items-center justify-center rounded-lg", existing ? `${colors.bg} ${colors.text}` : "bg-warm-paper dark:bg-white/10 text-slate-blue-400 dark:text-[#A8988B]")}>
                           <DocIcon type={dt.icon} />
                         </div>
 
@@ -356,20 +356,20 @@ export default function DocumentsPage() {
                           </span>
                         )}
                         {existing?.verification_status === "rejected" && (
-                          <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-500">
+                          <span className="flex items-center gap-1 rounded-full bg-red-50 dark:bg-red-950/40 px-2 py-0.5 text-xs font-semibold text-red-500">
                             Failed
                           </span>
                         )}
                       </div>
 
                       {/* Title & hint */}
-                      <p className="mt-3 text-sm font-semibold text-ink-navy">{dt.label}</p>
-                      <p className="mt-0.5 text-xs text-slate-blue-400 leading-relaxed">{dt.hint}</p>
+                      <p className="mt-3 text-sm font-semibold text-ink-navy dark:text-[#F0E6DA]">{dt.label}</p>
+                      <p className="mt-0.5 text-xs text-slate-blue-400 dark:text-[#A8988B] leading-relaxed">{dt.hint}</p>
 
                       {/* Upload date or Upload button */}
                       {existing ? (
                         <div className="mt-3 flex items-center justify-between">
-                          <span className="text-xs text-slate-blue-400">
+                          <span className="text-xs text-slate-blue-400 dark:text-[#A8988B]">
                             {existing.uploaded_at
                               ? `Uploaded ${new Date(existing.uploaded_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}`
                               : "Uploaded"}
@@ -389,7 +389,7 @@ export default function DocumentsPage() {
                                     setConfirmingValue("");
                                   }
                                 }}
-                                className="text-xs font-semibold text-verified-teal hover:underline"
+                                className="text-xs font-semibold text-verified-teal hover:underline cursor-pointer"
                               >
                                 Verify Details
                               </button>
@@ -412,10 +412,10 @@ export default function DocumentsPage() {
                       ) : (
                         <label
                           className={cn(
-                            "mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-ink-navy/10 bg-warm-paper/50 px-3 py-2 text-xs font-medium text-slate-blue transition-colors",
+                            "mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-ink-navy/10 dark:border-white/10 bg-warm-paper/50 dark:bg-white/5 px-3 py-2 text-xs font-medium text-slate-blue dark:text-[#C7B8AA] transition-colors",
                             isUploading
                               ? "opacity-60 cursor-not-allowed"
-                              : "hover:border-signal-orange/30 hover:text-signal-orange"
+                              : "hover:border-signal-orange/30 hover:text-signal-orange dark:hover:text-[#E8952B]"
                           )}
                         >
                           {isUploading ? (

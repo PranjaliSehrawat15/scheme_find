@@ -103,7 +103,7 @@ export function Features() {
     <section ref={sectionRef} className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper dark:bg-[#0E0C0A] py-20 sm:py-28">
       {/* Background artwork: bottom-waves.svg preserved in dark mode with luminous night shading */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-100 dark:opacity-45 dark:[filter:invert(0.92)_hue-rotate(195deg)_brightness(0.65)]"
+        className="pointer-events-none absolute inset-0 opacity-100 dark:opacity-35 dark:invert dark:hue-rotate-180 dark:contrast-125"
         style={{
           backgroundImage: "url('/assets/bottom-waves.svg')",
           backgroundSize: "cover",
@@ -113,8 +113,8 @@ export function Features() {
       />
       {/* Light mode gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 dark:hidden" />
-      {/* Dark mode gradient overlay — preserves the artwork curves while maintaining high text contrast */}
-      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/75 via-[#0E0C0A]/35 to-[#0E0C0A]/80" />
+      {/* Dark mode gradient overlay — subtle vignette that preserves the artwork curves */}
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/60 via-transparent to-[#0E0C0A]/70" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">

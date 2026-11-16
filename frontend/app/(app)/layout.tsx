@@ -22,14 +22,14 @@ export default function AppLayout({
 
   if (loading || !session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-warm-paper">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink-navy/10 border-t-signal-orange" />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink-navy/10 dark:border-white/20 border-t-signal-orange" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-warm-paper dark:bg-[#0E0C0A] text-ink-navy dark:text-[#F0E6DA]">
       <Navbar />
       <main className="flex-1 flex flex-col">{children}</main>
       {pathname !== "/chat" && <Footer />}

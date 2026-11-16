@@ -45,14 +45,14 @@ function formatTimeAgo(isoString?: string | null) {
 
 // ─── Score ring component ─────────────────────────────────────────────────────
 function ScoreRing({ score }: { score: number }) {
-  const pct = Math.round(score * 100);
+  const pct = score > 0 && score <= 1 ? Math.round(score * 100) : Math.round(score || 0);
   const r = 18;
   const circ = 2 * Math.PI * r;
   const dash = (pct / 100) * circ;
-  const color = pct >= 70 ? "#87A96B" : pct >= 40 ? "#D5851F" : "#5A3E2B";
+  const color = pct >= 70 ? "#87A96B" : pct >= 40 ? "#D5851F" : "#C48B60";
   return (
     <svg width="48" height="48" className="shrink-0" viewBox="0 0 48 48">
-      <circle cx="24" cy="24" r={r} fill="none" stroke="#F1F5F9" strokeWidth="5" />
+      <circle cx="24" cy="24" r={r} fill="none" className="stroke-[#F1F5F9] dark:stroke-white/10" strokeWidth="5" />
       <circle
         cx="24" cy="24" r={r} fill="none"
         stroke={color} strokeWidth="5"
@@ -162,10 +162,10 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen flex-col">
-        <main className="flex flex-1 items-center justify-center bg-gradient-to-b from-white to-warm-paper">
+        <main className="flex flex-1 items-center justify-center bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-orange-100 border-t-orange-500" />
-            <p className="text-sm font-medium text-slate-500">Loading your dashboard…</p>
+            <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-orange-100 dark:border-white/20 border-t-orange-500" />
+            <p className="text-sm font-medium text-slate-500 dark:text-[#C7B8AA]">Loading your dashboard…</p>
           </div>
         </main>
       </div>
@@ -202,7 +202,7 @@ export default function DashboardPage() {
   const paginatedMatches = filteredMatches.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#FAF8F5]">
+    <div ref={pageRef} className="min-h-screen bg-[#FAF8F5] dark:bg-[#0E0C0A]">
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
 
         {/* ── Hero Banner ─────────────────────────────────────────────────── */}
@@ -310,15 +310,15 @@ export default function DashboardPage() {
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               ),
               iconBg: "bg-[#5A3E2B]",
-              valColor: "text-[#5A3E2B]",
+              valColor: "text-[#5A3E2B] dark:text-[#F0E6DA]",
               href: "/documents",
             },
           ].map((stat) => (
             <div
               key={stat.label}
               className={cn(
-                "db-stat relative overflow-hidden rounded-2xl bg-white border border-[#5A3E2B]/10 p-5 shadow-sm",
-                stat.href && "hover:shadow-md hover:border-[#5A3E2B]/25 transition-all cursor-pointer group"
+                "db-stat relative overflow-hidden rounded-2xl bg-white dark:bg-[#161311] border border-[#5A3E2B]/10 dark:border-white/10 p-5 shadow-sm",
+                stat.href && "hover:shadow-md dark:hover:shadow-black/40 hover:border-[#5A3E2B]/25 dark:hover:border-white/20 transition-all cursor-pointer group"
               )}
               onClick={stat.href ? () => window.location.href = stat.href! : undefined}
             >
@@ -327,11 +327,11 @@ export default function DashboardPage() {
                   {stat.icon}
                 </div>
                 {stat.href && (
-                  <svg className="h-4 w-4 text-[#5A3E2B]/40 group-hover:text-[#5A3E2B] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 18l6-6-6-6"/></svg>
+                  <svg className="h-4 w-4 text-[#5A3E2B]/40 dark:text-[#C7B8AA] group-hover:text-[#5A3E2B] dark:group-hover:text-[#F0E6DA] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 18l6-6-6-6"/></svg>
                 )}
               </div>
               <p className={cn("mt-3 text-2xl font-bold font-display", stat.valColor)}>{stat.value}</p>
-              <p className="text-xs font-medium text-[#5A3E2B]/70 mt-0.5">{stat.label}</p>
+              <p className="text-xs font-medium text-[#5A3E2B]/70 dark:text-[#C7B8AA] mt-0.5">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -343,19 +343,21 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 db-section space-y-4">
             {/* ── Header row with title + status pills ── */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="font-display text-lg font-bold text-[#5A3E2B]">
+              <h2 className="font-display text-lg font-bold text-[#5A3E2B] dark:text-[#F0E6DA]">
                 Matched Schemes
-                <span className="ml-2 text-sm font-normal text-[#5A3E2B]/50">({filteredMatches.length})</span>
+                <span className="ml-2 text-sm font-normal text-[#5A3E2B]/50 dark:text-[#A8988B]">({filteredMatches.length})</span>
               </h2>
               {/* Status filter pills */}
-              <div className="flex gap-1.5 rounded-xl bg-[#5A3E2B]/10 p-1 self-start">
+              <div className="flex gap-1.5 rounded-xl bg-[#5A3E2B]/10 dark:bg-white/10 p-1 self-start">
                 {(["all", "ready", "pending"] as const).map((f) => (
                   <button
                     key={f}
                     onClick={() => setFilter(f)}
                     className={cn(
-                      "rounded-lg px-3 py-1 text-xs font-semibold transition-all capitalize",
-                      filter === f ? "bg-white text-[#5A3E2B] shadow-sm" : "text-[#5A3E2B]/70 hover:text-[#5A3E2B]"
+                      "rounded-lg px-3 py-1 text-xs font-semibold transition-all capitalize cursor-pointer",
+                      filter === f
+                        ? "bg-white dark:bg-[#221D19] text-[#5A3E2B] dark:text-[#F0E6DA] shadow-sm"
+                        : "text-[#5A3E2B]/70 dark:text-[#C7B8AA] hover:text-[#5A3E2B] dark:hover:text-[#F0E6DA]"
                     )}
                   >
                     {f === "all" ? "All" : f === "ready" ? `✅ Ready (${readyCount})` : `⏳ Pending (${pendingCount})`}
@@ -370,10 +372,10 @@ export default function DashboardPage() {
                 <button
                   onClick={() => setCategory("all")}
                   className={cn(
-                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-all",
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-all cursor-pointer",
                     category === "all"
-                      ? "border-[#5A3E2B] bg-[#5A3E2B] text-white shadow-sm"
-                      : "border-[#5A3E2B]/15 bg-white text-[#5A3E2B]/75 hover:border-[#5A3E2B]/30 hover:bg-[#FAF8F5]"
+                      ? "border-[#5A3E2B] bg-[#5A3E2B] text-white shadow-sm dark:bg-[#D5851F] dark:border-[#D5851F]"
+                      : "border-[#5A3E2B]/15 bg-white text-[#5A3E2B]/75 hover:border-[#5A3E2B]/30 hover:bg-[#FAF8F5] dark:border-white/15 dark:bg-[#1A1613] dark:text-[#C7B8AA] dark:hover:bg-[#221D19] dark:hover:text-[#F0E6DA]"
                   )}
                 >
                   All Categories
@@ -392,17 +394,17 @@ export default function DashboardPage() {
                       key={cat}
                       onClick={() => setCategory(cat)}
                       className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-all",
+                        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-all cursor-pointer",
                         category === cat
                           ? `${info.badge} border-transparent shadow-sm ring-1 ring-current/20`
-                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                          : "border-slate-200 dark:border-white/10 bg-white dark:bg-[#1A1613] text-slate-600 dark:text-[#C7B8AA] hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-[#221D19]"
                       )}
                     >
                       <span>{info.icon}</span>
                       <span>{info.label}</span>
                       <span className={cn(
                         "rounded-full px-1.5 py-0.5 text-[10px] font-bold",
-                        category === cat ? "bg-black/10" : "bg-slate-100 text-slate-500"
+                        category === cat ? "bg-black/10" : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-[#E8DCCF]"
                       )}>
                         {count}
                       </span>
@@ -413,22 +415,22 @@ export default function DashboardPage() {
             )}
 
             {filteredMatches.length === 0 ? (
-              <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-10 text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
-                  <svg className="h-6 w-6 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              <div className="rounded-2xl border-2 border-dashed border-slate-200 dark:border-white/10 bg-white dark:bg-[#161311] p-10 text-center">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-[#221D19]">
+                  <svg className="h-6 w-6 text-slate-400 dark:text-[#C7B8AA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
-                <p className="font-semibold text-slate-700">{totalMatches === 0 ? "No matches yet" : "No schemes in this filter"}</p>
-                <p className="mt-1 text-sm text-slate-400">
+                <p className="font-semibold text-slate-700 dark:text-[#F0E6DA]">{totalMatches === 0 ? "No matches yet" : "No schemes in this filter"}</p>
+                <p className="mt-1 text-sm text-slate-400 dark:text-[#A8988B]">
                   {totalMatches === 0 ? "Complete your profile to see matched schemes." : "Try changing the status or category filter above."}
                 </p>
                 {totalMatches === 0 ? (
-                  <Link href="/profile" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-bold text-white hover:bg-orange-600 transition-all">
+                  <Link href="/profile" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-bold text-white hover:bg-orange-600 transition-all cursor-pointer">
                     Complete Profile
                   </Link>
                 ) : (
                   <button
                     onClick={() => { setFilter("all"); setCategory("all"); }}
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/15 bg-white dark:bg-[#1A1613] px-4 py-2 text-sm font-semibold text-slate-600 dark:text-[#F0E6DA] hover:bg-slate-50 dark:hover:bg-[#221D19] transition-all cursor-pointer"
                   >
                     Clear all filters
                   </button>
@@ -443,13 +445,13 @@ export default function DashboardPage() {
                   <div
                     key={m.scheme_id}
                     className={cn(
-                      "rounded-2xl border bg-white shadow-sm transition-all duration-200",
-                      isOpen ? "border-orange-200 shadow-md" : "border-slate-100 hover:border-slate-200 hover:shadow-md"
+                      "rounded-2xl border bg-white dark:bg-[#161311] shadow-sm transition-all duration-200",
+                      isOpen ? "border-orange-200 dark:border-[#D5851F]/40 shadow-md" : "border-slate-100 dark:border-white/10 hover:border-slate-200 dark:hover:border-white/20 hover:shadow-md"
                     )}
                   >
                     <button
                       onClick={() => toggleExpanded(m.scheme_id)}
-                      className="flex w-full items-start gap-4 px-5 py-4 text-left sm:items-center"
+                      className="flex w-full items-start gap-4 px-5 py-4 text-left sm:items-center cursor-pointer"
                     >
                       {/* Score ring */}
                       <ScoreRing score={m.match_score} />
@@ -462,24 +464,24 @@ export default function DashboardPage() {
                             <span>{info.label}</span>
                           </span>
                           {isReady ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-[#87A96B]/15 px-2 py-0.5 text-[11px] font-semibold text-[#3D522D]">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#87A96B]/15 dark:bg-[#87A96B]/25 px-2 py-0.5 text-[11px] font-semibold text-[#3D522D] dark:text-[#A7D18C]">
                               <span className="h-1.5 w-1.5 rounded-full bg-[#87A96B]" />
                               Ready to Apply
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-[#D5851F]/15 px-2 py-0.5 text-[11px] font-semibold text-[#92520B]">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#D5851F]/15 dark:bg-[#D5851F]/25 px-2 py-0.5 text-[11px] font-semibold text-[#92520B] dark:text-[#F3B768]">
                               <span className="h-1.5 w-1.5 rounded-full bg-[#D5851F]" />
                               {m.missing_documents.length} doc{m.missing_documents.length !== 1 ? "s" : ""} needed
                             </span>
                           )}
                         </div>
-                        <p className="text-sm font-bold text-[#5A3E2B] leading-snug">{m.scheme_name}</p>
-                        <p className="text-xs text-[#5A3E2B]/60 mt-0.5 truncate">{m.issuing_authority}</p>
+                        <p className="text-sm font-bold text-[#5A3E2B] dark:text-[#F0E6DA] leading-snug">{m.scheme_name}</p>
+                        <p className="text-xs text-[#5A3E2B]/60 dark:text-[#A8988B] mt-0.5 truncate">{m.issuing_authority}</p>
                       </div>
 
                       {/* Chevron */}
                       <svg
-                        className={cn("h-5 w-5 shrink-0 text-[#5A3E2B]/40 transition-transform duration-300", isOpen && "rotate-180")}
+                        className={cn("h-5 w-5 shrink-0 text-[#5A3E2B]/40 dark:text-[#C7B8AA] transition-transform duration-300", isOpen && "rotate-180")}
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
                       >
                         <path d="M6 9l6 6 6-6" />
@@ -488,8 +490,8 @@ export default function DashboardPage() {
 
                     {/* Expanded details */}
                     {isOpen && (
-                      <div className="border-t border-[#5A3E2B]/10 px-5 py-5 space-y-4">
-                        <p className="text-sm text-[#5A3E2B]/85 leading-relaxed">{m.benefit_summary}</p>
+                      <div className="border-t border-[#5A3E2B]/10 dark:border-white/10 px-5 py-5 space-y-4">
+                        <p className="text-sm text-[#5A3E2B]/85 dark:text-[#C7B8AA] leading-relaxed">{m.benefit_summary}</p>
 
                         {m.missing_documents.length > 0 && (
                           <div>
@@ -572,9 +574,9 @@ export default function DashboardPage() {
           <div className="space-y-5 db-section">
 
             {/* Document progress card */}
-            <div className="rounded-2xl bg-white border border-[#5A3E2B]/10 p-5 shadow-sm">
+            <div className="rounded-2xl bg-white dark:bg-[#161311] border border-[#5A3E2B]/10 dark:border-white/10 p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-display text-sm font-bold text-[#5A3E2B]">Document Progress</h3>
+                <h3 className="font-display text-sm font-bold text-[#5A3E2B] dark:text-[#F0E6DA]">Document Progress</h3>
                 <Link href="/documents" className="text-xs font-semibold text-[#D5851F] hover:text-[#B86C14] transition-colors">
                   View all →
                 </Link>
@@ -584,7 +586,7 @@ export default function DashboardPage() {
               <div className="flex items-center gap-4 mb-4">
                 <div className="relative flex h-16 w-16 items-center justify-center">
                   <svg className="h-16 w-16 -rotate-90" viewBox="0 0 64 64">
-                    <circle cx="32" cy="32" r="26" fill="none" stroke="#F8F5F2" strokeWidth="8" />
+                    <circle cx="32" cy="32" r="26" fill="none" className="stroke-[#F8F5F2] dark:stroke-white/10" strokeWidth="8" />
                     <circle
                       cx="32" cy="32" r="26" fill="none"
                       stroke={docsVerifiedPct === 100 ? "#87A96B" : "#D5851F"}
@@ -594,11 +596,11 @@ export default function DashboardPage() {
                       style={{ transition: "stroke-dasharray 0.8s ease" }}
                     />
                   </svg>
-                  <span className="absolute text-sm font-bold text-[#5A3E2B]">{docsVerifiedPct}%</span>
+                  <span className="absolute text-sm font-bold text-[#5A3E2B] dark:text-[#F0E6DA]">{docsVerifiedPct}%</span>
                 </div>
                 <div>
-                  <p className="text-xl font-bold text-[#5A3E2B]">{verifiedDocs}<span className="text-[#5A3E2B]/50 font-normal text-sm">/{docs.length}</span></p>
-                  <p className="text-xs text-[#5A3E2B]/70">Verified</p>
+                  <p className="text-xl font-bold text-[#5A3E2B] dark:text-[#F0E6DA]">{verifiedDocs}<span className="text-[#5A3E2B]/50 dark:text-[#A8988B] font-normal text-sm">/{docs.length}</span></p>
+                  <p className="text-xs text-[#5A3E2B]/70 dark:text-[#C7B8AA]">Verified</p>
                   {docs.length < 10 && (
                     <p className="text-[11px] text-[#D5851F] font-medium mt-0.5">{10 - docs.length} more to upload</p>
                   )}
@@ -609,7 +611,7 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   {docs.slice(0, 5).map((doc) => (
                     <div key={doc.id} className="flex items-center justify-between py-1">
-                      <p className="text-xs font-medium text-slate-700 capitalize truncate mr-2">{docLabel(doc.doc_type)}</p>
+                      <p className="text-xs font-medium text-slate-700 dark:text-[#C7B8AA] capitalize truncate mr-2">{docLabel(doc.doc_type)}</p>
                       <DocStatusBadge status={doc.verification_status ?? "pending"} />
                     </div>
                   ))}
@@ -620,8 +622,8 @@ export default function DashboardPage() {
                   )}
                 </div>
               ) : (
-                <div className="rounded-xl border-2 border-dashed border-slate-200 p-4 text-center">
-                  <p className="text-xs font-medium text-slate-500">No documents yet</p>
+                <div className="rounded-xl border-2 border-dashed border-slate-200 dark:border-white/15 p-4 text-center">
+                  <p className="text-xs font-medium text-slate-500 dark:text-[#A8988B]">No documents yet</p>
                   <Link href="/documents" className="mt-2 inline-block text-xs font-bold text-orange-500 hover:underline">
                     Upload now →
                   </Link>
@@ -631,22 +633,22 @@ export default function DashboardPage() {
 
             {/* Missing docs summary */}
             {allMissingDocs.length > 0 && (
-              <div className="rounded-2xl bg-amber-50 border border-amber-200 p-5">
+              <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 p-5">
                 <div className="flex items-start gap-3">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-white">
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">Upload to unlock {pendingCount} scheme{pendingCount !== 1 ? "s" : ""}</p>
+                    <p className="text-xs font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wide">Upload to unlock {pendingCount} scheme{pendingCount !== 1 ? "s" : ""}</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {allMissingDocs.slice(0, 6).map((doc) => (
-                        <span key={doc} className="rounded-lg bg-amber-100 border border-amber-300 px-2 py-0.5 text-[11px] font-semibold text-amber-800">{docLabel(doc)}</span>
+                        <span key={doc} className="rounded-lg bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-700/50 px-2 py-0.5 text-[11px] font-semibold text-amber-800 dark:text-amber-200">{docLabel(doc)}</span>
                       ))}
                       {allMissingDocs.length > 6 && (
-                        <span className="rounded-lg bg-amber-100 border border-amber-300 px-2 py-0.5 text-[11px] font-semibold text-amber-800">+{allMissingDocs.length - 6} more</span>
+                        <span className="rounded-lg bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-700/50 px-2 py-0.5 text-[11px] font-semibold text-amber-800 dark:text-amber-200">+{allMissingDocs.length - 6} more</span>
                       )}
                     </div>
-                    <Link href="/documents" className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-600 transition-all">
+                    <Link href="/documents" className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-600 transition-all cursor-pointer">
                       <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 4v16m8-8H4"/></svg>
                       Upload Documents
                     </Link>
@@ -656,8 +658,8 @@ export default function DashboardPage() {
             )}
 
             {/* Quick actions */}
-            <div className="rounded-2xl bg-white border border-[#5A3E2B]/10 p-5 shadow-sm">
-              <h3 className="font-display text-sm font-bold text-[#5A3E2B] mb-3">Quick Actions</h3>
+            <div className="rounded-2xl bg-white dark:bg-[#161311] border border-[#5A3E2B]/10 dark:border-white/10 p-5 shadow-sm">
+              <h3 className="font-display text-sm font-bold text-[#5A3E2B] dark:text-[#F0E6DA] mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 {[
                   { href: "/chat", label: "Ask AI Assistant", sub: "Get scheme guidance instantly", icon: "💬", badge: "" },
@@ -667,14 +669,14 @@ export default function DashboardPage() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex items-center gap-3 rounded-xl border border-[#5A3E2B]/10 p-3 hover:border-[#D5851F]/30 hover:bg-[#D5851F]/5 transition-all group"
+                    className="flex items-center gap-3 rounded-xl border border-[#5A3E2B]/10 dark:border-white/10 p-3 hover:border-[#D5851F]/30 dark:hover:border-white/20 hover:bg-[#D5851F]/5 dark:hover:bg-white/5 transition-all group"
                   >
                     <span className="text-xl">{item.icon}</span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-[#5A3E2B] group-hover:text-[#D5851F] transition-colors">{item.label}</p>
-                      <p className="text-[11px] text-[#5A3E2B]/60">{item.sub}</p>
+                      <p className="text-xs font-bold text-[#5A3E2B] dark:text-[#F0E6DA] group-hover:text-[#D5851F] dark:group-hover:text-[#E8952B] transition-colors">{item.label}</p>
+                      <p className="text-[11px] text-[#5A3E2B]/60 dark:text-[#A8988B]">{item.sub}</p>
                     </div>
-                    <svg className="h-4 w-4 shrink-0 text-[#5A3E2B]/40 group-hover:text-[#D5851F] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 18l6-6-6-6"/></svg>
+                    <svg className="h-4 w-4 shrink-0 text-[#5A3E2B]/40 dark:text-[#C7B8AA] group-hover:text-[#D5851F] dark:group-hover:text-[#E8952B] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 18l6-6-6-6"/></svg>
                   </Link>
                 ))}
               </div>

@@ -154,31 +154,31 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-warm-paper">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink-navy/10 border-t-signal-orange" />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink-navy/10 dark:border-white/20 border-t-signal-orange" />
       </div>
     );
   }
 
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper">
+      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
         <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
           {/* Header */}
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-6">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-signal-orange/20 to-signal-orange/5 ring-2 ring-signal-orange/20">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-signal-orange/20 to-signal-orange/5 dark:from-signal-orange/25 dark:to-signal-orange/10 ring-2 ring-signal-orange/20">
               <span className="text-2xl font-bold text-signal-orange">{initials}</span>
             </div>
             <div className="text-center sm:text-left">
-              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy">
+              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA]">
                 {displayName || "Your Profile"}
               </h1>
-              <p className="mt-0.5 text-sm text-slate-blue">{email}</p>
+              <p className="mt-0.5 text-sm text-slate-blue dark:text-[#C7B8AA]">{email}</p>
               {memberSince && (
-                <p className="mt-1 text-xs text-slate-blue-400">Member since {memberSince}</p>
+                <p className="mt-1 text-xs text-slate-blue-400 dark:text-[#A8988B]">Member since {memberSince}</p>
               )}
               {!form.full_name && (
-                <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-caution-amber/10 px-3 py-1 text-xs font-medium text-caution-amber">
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-caution-amber/10 dark:bg-caution-amber/20 px-3 py-1 text-xs font-medium text-caution-amber">
                   ⚠ Complete your profile to get scheme matches
                 </p>
               )}
@@ -186,14 +186,16 @@ export default function ProfilePage() {
           </div>
 
           {/* Tabs */}
-          <div className="mt-8 flex gap-1 rounded-lg bg-ink-navy/5 p-1">
+          <div className="mt-8 flex gap-1 rounded-lg bg-ink-navy/5 dark:bg-white/5 p-1">
             {tabs.map((t, i) => (
               <button
                 key={t}
                 onClick={() => setTab(i)}
                 className={cn(
-                  "flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all",
-                  tab === i ? "bg-white text-ink-navy shadow-sm" : "text-slate-blue hover:text-ink-navy"
+                  "flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all cursor-pointer",
+                  tab === i
+                    ? "bg-white dark:bg-[#1E1A16] text-ink-navy dark:text-[#F0E6DA] shadow-sm"
+                    : "text-slate-blue dark:text-[#A8988B] hover:text-ink-navy dark:hover:text-[#F0E6DA]"
                 )}
               >
                 {t}
@@ -204,15 +206,15 @@ export default function ProfilePage() {
           <div className="mt-6 space-y-5">
             {/* Personal */}
             {tab === 0 && (
-              <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                <h2 className="font-display text-lg font-semibold text-ink-navy">Personal information</h2>
-                <p className="mt-1 text-sm text-slate-blue">This data determines which schemes you qualify for.</p>
+              <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Personal information</h2>
+                <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">This data determines which schemes you qualify for.</p>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <Input label="Full name" value={form.full_name} onChange={(e) => set("full_name", e.target.value)} placeholder="Your full name" />
                   <Input label="Age" type="number" value={form.age} onChange={(e) => set("age", e.target.value)} placeholder="e.g. 28" />
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-ink-navy">Gender</label>
-                    <select value={form.gender} onChange={(e) => set("gender", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none">
+                    <label className="block text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">Gender</label>
+                    <select value={form.gender} onChange={(e) => set("gender", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3.5 py-2.5 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none">
                       <option value="">Select gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
@@ -220,8 +222,8 @@ export default function ProfilePage() {
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-ink-navy">Social category</label>
-                    <select value={form.social_category} onChange={(e) => set("social_category", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none">
+                    <label className="block text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">Social category</label>
+                    <select value={form.social_category} onChange={(e) => set("social_category", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3.5 py-2.5 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none">
                       <option value="">Select category</option>
                       <option value="general">General</option>
                       <option value="obc">OBC</option>
@@ -231,8 +233,8 @@ export default function ProfilePage() {
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-ink-navy">Education level</label>
-                    <select value={form.education_level} onChange={(e) => set("education_level", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none">
+                    <label className="block text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">Education level</label>
+                    <select value={form.education_level} onChange={(e) => set("education_level", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3.5 py-2.5 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none">
                       <option value="">Select level</option>
                       <option value="none">No formal education</option>
                       <option value="primary">Primary (up to 5th)</option>
@@ -251,13 +253,13 @@ export default function ProfilePage() {
 
             {/* Location */}
             {tab === 1 && (
-              <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                <h2 className="font-display text-lg font-semibold text-ink-navy">Location</h2>
-                <p className="mt-1 text-sm text-slate-blue">State and district determine state-specific scheme eligibility.</p>
+              <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Location</h2>
+                <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">State and district determine state-specific scheme eligibility.</p>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-ink-navy">State</label>
-                    <select value={form.state} onChange={(e) => set("state", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none">
+                    <label className="block text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">State</label>
+                    <select value={form.state} onChange={(e) => set("state", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3.5 py-2.5 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none">
                       <option value="">Select state</option>
                       {["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Delhi","Jammu & Kashmir","Ladakh"].map(s => (
                         <option key={s} value={s}>{s}</option>
@@ -271,14 +273,14 @@ export default function ProfilePage() {
 
             {/* Economic */}
             {tab === 2 && (
-              <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                <h2 className="font-display text-lg font-semibold text-ink-navy">Economic indicators</h2>
-                <p className="mt-1 text-sm text-slate-blue">Used for means-tested scheme eligibility calculations.</p>
+              <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Economic indicators</h2>
+                <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Used for means-tested scheme eligibility calculations.</p>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <Input label="Annual household income (₹)" type="number" value={form.annual_income} onChange={(e) => set("annual_income", e.target.value)} placeholder="e.g. 300000" hint="Total income from all sources" />
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-ink-navy">Occupation</label>
-                    <select value={form.occupation} onChange={(e) => set("occupation", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none">
+                    <label className="block text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">Occupation</label>
+                    <select value={form.occupation} onChange={(e) => set("occupation", e.target.value)} className="block w-full rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3.5 py-2.5 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none">
                       <option value="">Select occupation</option>
                       <option value="farmer">Farmer</option>
                       <option value="daily_wage">Daily wage worker</option>
@@ -291,14 +293,14 @@ export default function ProfilePage() {
                   </div>
                   <Input label="Land owned (acres)" type="number" value={form.land_owned_acres} onChange={(e) => set("land_owned_acres", e.target.value)} placeholder="0 if none" />
                 </div>
-                <div className="mt-5 space-y-3 border-t border-ink-navy/10 pt-5">
-                  <label className="flex items-center gap-3 rounded-lg bg-warm-paper/50 px-4 py-3 cursor-pointer">
-                    <input type="checkbox" checked={form.has_bpl_card} onChange={(e) => set("has_bpl_card", e.target.checked)} className="h-4 w-4 rounded border-ink-navy/20 accent-signal-orange" />
-                    <span className="text-sm text-ink-navy">BPL (Below Poverty Line) ration card holder</span>
+                <div className="mt-5 space-y-3 border-t border-ink-navy/10 dark:border-white/10 pt-5">
+                  <label className="flex items-center gap-3 rounded-lg bg-warm-paper/50 dark:bg-white/5 px-4 py-3 cursor-pointer">
+                    <input type="checkbox" checked={form.has_bpl_card} onChange={(e) => set("has_bpl_card", e.target.checked)} className="h-4 w-4 rounded border-ink-navy/20 dark:border-white/20 accent-signal-orange" />
+                    <span className="text-sm text-ink-navy dark:text-[#F0E6DA]">BPL (Below Poverty Line) ration card holder</span>
                   </label>
-                  <label className="flex items-center gap-3 rounded-lg bg-warm-paper/50 px-4 py-3 cursor-pointer">
-                    <input type="checkbox" checked={form.has_disability} onChange={(e) => set("has_disability", e.target.checked)} className="h-4 w-4 rounded border-ink-navy/20 accent-signal-orange" />
-                    <span className="text-sm text-ink-navy">Certified disability (40% or more)</span>
+                  <label className="flex items-center gap-3 rounded-lg bg-warm-paper/50 dark:bg-white/5 px-4 py-3 cursor-pointer">
+                    <input type="checkbox" checked={form.has_disability} onChange={(e) => set("has_disability", e.target.checked)} className="h-4 w-4 rounded border-ink-navy/20 dark:border-white/20 accent-signal-orange" />
+                    <span className="text-sm text-ink-navy dark:text-[#F0E6DA]">Certified disability (40% or more)</span>
                   </label>
                 </div>
               </div>
@@ -307,12 +309,12 @@ export default function ProfilePage() {
             {/* Account */}
             {tab === 3 && (
               <div className="space-y-5">
-                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                  <h2 className="font-display text-lg font-semibold text-ink-navy">Account security</h2>
-                  <p className="mt-1 text-sm text-slate-blue">Your login email.</p>
+                <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Account security</h2>
+                  <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Your login email.</p>
                   <div className="mt-5">
                     <Input label="Email" type="email" value={email} readOnly />
-                    <p className="mt-2 text-xs text-slate-blue-400">To change your email or password, use the Supabase dashboard or contact support.</p>
+                    <p className="mt-2 text-xs text-slate-blue-400 dark:text-[#A8988B]">To change your email or password, use the Supabase dashboard or contact support.</p>
                   </div>
                 </div>
               </div>
@@ -320,11 +322,11 @@ export default function ProfilePage() {
 
             {/* Save bar */}
             {error && (
-              <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p>
+              <p className="rounded-lg bg-red-50 dark:bg-red-900/30 px-4 py-3 text-sm text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/40">{error}</p>
             )}
             {tab !== 3 && (
-              <div className="sticky bottom-0 flex items-center justify-between rounded-2xl border border-ink-navy/10 bg-white/95 p-4 shadow-lg backdrop-blur-sm">
-                <p className="text-xs text-slate-blue-400">
+              <div className="sticky bottom-0 flex items-center justify-between rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white/95 dark:bg-[#161311]/95 p-4 shadow-lg dark:shadow-black/60 backdrop-blur-sm">
+                <p className="text-xs text-slate-blue-400 dark:text-[#A8988B]">
                   {saved ? "✓ Saved! Eligibility matching will re-run." : "Changes will re-run eligibility matching against all schemes."}
                 </p>
                 <Button size="sm" onClick={handleSave} disabled={saving}>

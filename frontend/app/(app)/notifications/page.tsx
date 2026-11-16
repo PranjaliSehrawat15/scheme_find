@@ -103,12 +103,12 @@ export default function NotificationsPage() {
 
   return (
     <div ref={pageRef} className="flex min-h-screen flex-col">
-      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper">
+      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
         <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="nt-hero flex items-center justify-between">
             <div>
-              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy sm:text-3xl">Notifications</h1>
-              <p className="mt-1 text-sm text-slate-blue">
+              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA] sm:text-3xl">Notifications</h1>
+              <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">
                 {loading
                   ? "Loading…"
                   : unreadCount > 0
@@ -117,25 +117,27 @@ export default function NotificationsPage() {
               </p>
             </div>
             {unreadCount > 0 && (
-              <button onClick={markAllRead} className="text-sm font-semibold text-signal-orange hover:text-signal-orange-600 transition-colors">
+              <button onClick={markAllRead} className="text-sm font-semibold text-signal-orange hover:text-signal-orange-600 transition-colors cursor-pointer">
                 Mark all as read
               </button>
             )}
           </div>
 
-          <div className="nt-tabs mt-6 flex gap-1 overflow-x-auto rounded-lg bg-ink-navy/5 p-1">
+          <div className="nt-tabs mt-6 flex gap-1 overflow-x-auto rounded-lg bg-ink-navy/5 dark:bg-white/5 p-1">
             {tabs.map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
                 className={cn(
-                  "whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-all",
-                  tab === t ? "bg-white text-ink-navy shadow-sm" : "text-slate-blue hover:text-ink-navy"
+                  "whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-all cursor-pointer",
+                  tab === t
+                    ? "bg-white dark:bg-[#1E1A16] text-ink-navy dark:text-[#F0E6DA] shadow-sm"
+                    : "text-slate-blue dark:text-[#A8988B] hover:text-ink-navy dark:hover:text-[#F0E6DA]"
                 )}
               >
                 {t}
                 {t === "Unread" && unreadCount > 0 && (
-                  <span className="ml-2 rounded-full bg-signal-orange/10 px-1.5 py-0.5 text-xs font-medium text-signal-orange">{unreadCount}</span>
+                  <span className="ml-2 rounded-full bg-signal-orange/10 dark:bg-signal-orange/20 px-1.5 py-0.5 text-xs font-medium text-signal-orange">{unreadCount}</span>
                 )}
               </button>
             ))}
@@ -143,7 +145,7 @@ export default function NotificationsPage() {
 
           {loading ? (
             <div className="mt-12 text-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink-navy/10 border-t-signal-orange mx-auto" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink-navy/10 dark:border-white/20 border-t-signal-orange mx-auto" />
             </div>
           ) : filtered.length > 0 ? (
             <div className="nt-list mt-5 space-y-2">
@@ -156,8 +158,8 @@ export default function NotificationsPage() {
                     className={cn(
                       "nt-item flex items-start gap-4 rounded-xl border p-4 transition-all cursor-pointer",
                       n.read_at
-                        ? "border-ink-navy/10 bg-white hover:shadow-sm"
-                        : "border-signal-orange/15 bg-gradient-to-r from-signal-orange/[0.02] to-white hover:shadow-sm"
+                        ? "border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] hover:shadow-sm"
+                        : "border-signal-orange/15 dark:border-signal-orange/30 bg-gradient-to-r from-signal-orange/[0.02] to-white dark:from-signal-orange/[0.08] dark:to-[#1A1613] hover:shadow-sm"
                     )}
                     onClick={() => toggleRead(n.id)}
                   >
@@ -170,16 +172,16 @@ export default function NotificationsPage() {
                           <span className={cn("inline-block rounded-md px-2 py-0.5 text-[10px] font-medium", cfg.bg, cfg.color)}>
                             {typeLabels[n.type] || n.type}
                           </span>
-                          <h3 className={cn("mt-1 text-sm font-semibold", n.read_at ? "text-ink-navy" : "text-ink-navy")}>
+                          <h3 className="mt-1 text-sm font-semibold text-ink-navy dark:text-[#F0E6DA]">
                             {payload?.title || "Notification"}
                           </h3>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {!n.read_at && <span className="h-2 w-2 rounded-full bg-signal-orange" />}
-                          <span className="text-xs text-slate-blue-400">{timeAgo(n.created_at)}</span>
+                          <span className="text-xs text-slate-blue-400 dark:text-[#A8988B]">{timeAgo(n.created_at)}</span>
                         </div>
                       </div>
-                      <p className="mt-1 text-sm text-slate-blue leading-relaxed">{payload?.message || ""}</p>
+                      <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA] leading-relaxed">{payload?.message || ""}</p>
                     </div>
                   </div>
                 );
@@ -187,13 +189,13 @@ export default function NotificationsPage() {
             </div>
           ) : (
             <div className="nt-list mt-12 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-ink-navy/5">
-                <svg className="h-7 w-7 text-slate-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-ink-navy/5 dark:bg-white/5">
+                <svg className="h-7 w-7 text-slate-blue-300 dark:text-[#A8988B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                   <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 01-3.46 0" />
                 </svg>
               </div>
-              <p className="mt-4 text-sm font-medium text-ink-navy">No notifications</p>
-              <p className="text-sm text-slate-blue-400">Nothing here for this filter yet.</p>
+              <p className="mt-4 text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">No notifications</p>
+              <p className="text-sm text-slate-blue-400 dark:text-[#A8988B]">Nothing here for this filter yet.</p>
             </div>
           )}
         </div>

@@ -236,22 +236,22 @@ export function FAQ() {
 
   return (
     <section className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper dark:bg-[#0E0C0A] py-20 sm:py-28">
-      {/* Woman image — preserved and illuminated as chalk pencil sketch in dark mode */}
+      {/* Woman image — preserved and illuminated as fine chalk sketch in dark mode */}
       <img
         ref={womanRef}
         src="/assets/woman.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.16] dark:invert"
+        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.22] dark:invert dark:brightness-110"
         style={{ right: "-5%", height: "110%", maxHeight: "780px" }}
       />
-      {/* Labour image — preserved and illuminated as chalk pencil sketch in dark mode */}
+      {/* Labour image — preserved and illuminated as fine chalk sketch in dark mode */}
       <img
         ref={labourRef}
         src="/assets/labour.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.16] dark:invert"
+        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.22] dark:invert dark:brightness-110"
         style={{ left: "-5%", height: "110%", maxHeight: "780px" }}
       />
       {/* Decorative animated SVGs on left side */}
@@ -264,10 +264,10 @@ export function FAQ() {
       </div>
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-navy sm:text-4xl">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA] sm:text-4xl">
             Common questions
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-slate-blue">
+          <p className="mt-3 text-base leading-relaxed text-slate-blue dark:text-[#C7B8AA]">
             Quick answers to the things most people ask.
           </p>
         </div>

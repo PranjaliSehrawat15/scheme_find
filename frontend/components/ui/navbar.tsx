@@ -120,57 +120,57 @@ export function Navbar() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((o) => !o)}
-                  className="flex items-center gap-2 rounded-full px-3 py-1.5 bg-[#FAF8F5] border border-[#5A3E2B]/15 hover:bg-[#5A3E2B]/5 transition-all cursor-pointer"
+                  className="flex items-center gap-2 rounded-full px-3 py-1.5 bg-[#FAF8F5] dark:bg-[#1A1613] border border-[#5A3E2B]/15 dark:border-white/15 hover:bg-[#5A3E2B]/5 dark:hover:bg-white/5 transition-all cursor-pointer"
                   aria-label="User profile menu"
                 >
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#D5851F] text-[11px] font-bold text-white shadow-xs">
                     {initials}
                   </span>
-                  <span className="hidden sm:block text-sm font-semibold text-[#5A3E2B] max-w-[120px] truncate">
+                  <span className="hidden sm:block text-sm font-semibold text-[#5A3E2B] dark:text-[#F0E6DA] max-w-[120px] truncate">
                     {user.user_metadata?.full_name ?? user.email}
                   </span>
-                  <svg className="h-3.5 w-3.5 text-[#5A3E2B]/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <svg className="h-3.5 w-3.5 text-[#5A3E2B]/60 dark:text-[#C7B8AA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M6 9l6 6 6-6" />
                   </svg>
                 </button>
 
                 {menuOpen && (
-                  <div className="absolute right-0 mt-2 w-52 rounded-xl bg-white shadow-lg border border-[#5A3E2B]/10 py-1.5 z-50">
-                    <div className="px-4 py-2.5 border-b border-[#5A3E2B]/10">
-                      <p className="text-xs font-medium text-[#5A3E2B]/50">Signed in as</p>
-                      <p className="text-xs font-semibold text-[#5A3E2B] truncate">{user.email}</p>
+                  <div className="absolute right-0 mt-2 w-52 rounded-xl bg-white dark:bg-[#1A1613] shadow-xl dark:shadow-black/60 border border-[#5A3E2B]/10 dark:border-white/15 py-1.5 z-50">
+                    <div className="px-4 py-2.5 border-b border-[#5A3E2B]/10 dark:border-white/10">
+                      <p className="text-xs font-medium text-[#5A3E2B]/50 dark:text-[#A8988B]">Signed in as</p>
+                      <p className="text-xs font-semibold text-[#5A3E2B] dark:text-[#F0E6DA] truncate">{user.email}</p>
                     </div>
                     <Link
                       href="/dashboard"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 hover:bg-[#87A96B]/10 hover:text-[#5A3E2B] transition-colors"
+                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 dark:text-[#C7B8AA] hover:bg-[#87A96B]/10 dark:hover:bg-white/5 hover:text-[#5A3E2B] dark:hover:text-[#F0E6DA] transition-colors"
                     >
                       Dashboard
                     </Link>
                     <Link
                       href="/profile"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 hover:bg-[#87A96B]/10 hover:text-[#5A3E2B] transition-colors"
+                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 dark:text-[#C7B8AA] hover:bg-[#87A96B]/10 dark:hover:bg-white/5 hover:text-[#5A3E2B] dark:hover:text-[#F0E6DA] transition-colors"
                     >
                       Profile
                     </Link>
                     <Link
                       href="/documents"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 hover:bg-[#87A96B]/10 hover:text-[#5A3E2B] transition-colors"
+                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 dark:text-[#C7B8AA] hover:bg-[#87A96B]/10 dark:hover:bg-white/5 hover:text-[#5A3E2B] dark:hover:text-[#F0E6DA] transition-colors"
                     >
                       Document Vault
                     </Link>
                     <Link
                       href="/settings"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 hover:bg-[#87A96B]/10 hover:text-[#5A3E2B] transition-colors"
+                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#5A3E2B]/85 dark:text-[#C7B8AA] hover:bg-[#87A96B]/10 dark:hover:bg-white/5 hover:text-[#5A3E2B] dark:hover:text-[#F0E6DA] transition-colors"
                     >
                       Settings
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-[#5A3E2B]/10 mt-1 cursor-pointer"
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors border-t border-[#5A3E2B]/10 dark:border-white/10 mt-1 cursor-pointer"
                     >
                       Sign Out
                     </button>
@@ -204,7 +204,7 @@ export function Navbar() {
               }}
               aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
               title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#5A3E2B]/15 bg-[#FAF8F5] text-[#5A3E2B] hover:bg-[#5A3E2B]/10 hover:border-[#D5851F]/40 transition-all cursor-pointer shadow-xs active:scale-95"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#5A3E2B]/15 dark:border-white/15 bg-[#FAF8F5] dark:bg-[#1A1613] text-[#5A3E2B] dark:text-[#F0E6DA] hover:bg-[#5A3E2B]/10 dark:hover:bg-white/10 hover:border-[#D5851F]/40 transition-all cursor-pointer shadow-xs active:scale-95"
             >
               {isDark ? (
                 <svg className="h-4 w-4 text-[#D5851F] transition-transform duration-300 hover:rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -222,7 +222,7 @@ export function Navbar() {
             <div className="md:hidden relative" ref={mobileMenuRef}>
               <button
                 onClick={() => setMobileMenuOpen((o) => !o)}
-                className="p-2 rounded-lg text-[#5A3E2B]/80 hover:text-[#5A3E2B] hover:bg-[#5A3E2B]/5 transition-colors"
+                className="p-2 rounded-lg text-[#5A3E2B]/80 dark:text-[#C7B8AA] hover:text-[#5A3E2B] dark:hover:text-[#F0E6DA] hover:bg-[#5A3E2B]/5 dark:hover:bg-white/5 transition-colors"
                 aria-label="Open Navigation Menu"
               >
                 {mobileMenuOpen ? (
@@ -237,7 +237,7 @@ export function Navbar() {
               </button>
 
               {mobileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white shadow-xl border border-[#5A3E2B]/10 py-2 z-50">
+                <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-[#1A1613] shadow-xl dark:shadow-black/60 border border-[#5A3E2B]/10 dark:border-white/15 py-2 z-50">
                   {user ? (
                     <>
                       <Link
@@ -339,20 +339,20 @@ export function Navbar() {
 
       {/* Universal Back to Dashboard Header Strip for Logged-In Users on Sub-Pages */}
       {showBackButton && (
-        <div className="bg-gradient-to-r from-[#FAF8F5] via-[#F4F7F1] to-white border-b border-[#87A96B]/20 px-6 lg:px-10 py-2.5 shadow-2xs">
+        <div className="bg-gradient-to-r from-[#FAF8F5] via-[#F4F7F1] to-white dark:from-[#141210] dark:via-[#161311] dark:to-[#141210] border-b border-[#87A96B]/20 dark:border-white/10 px-6 lg:px-10 py-2.5 shadow-2xs">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#5A3E2B] hover:text-[#D5851F] transition-all py-0.5 group"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#5A3E2B] dark:text-[#E8DCCF] hover:text-[#D5851F] dark:hover:text-[#E8952B] transition-all py-0.5 group"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D5851F]/15 text-[#D5851F] group-hover:bg-[#D5851F] group-hover:text-white transition-colors shadow-2xs">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D5851F]/15 dark:bg-[#D5851F]/25 text-[#D5851F] dark:text-[#E8952B] group-hover:bg-[#D5851F] group-hover:text-white transition-colors shadow-2xs">
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M15 19l-7-7 7-7" />
                 </svg>
               </span>
               <span>Back to Dashboard</span>
             </Link>
-            <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-[#5A3E2B]/70">
+            <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-[#5A3E2B]/70 dark:text-[#C7B8AA]">
               <span>Citizen Workspace</span>
               <span className="h-2 w-2 rounded-full bg-[#87A96B] animate-pulse" />
             </div>
@@ -362,13 +362,13 @@ export function Navbar() {
 
       {/* Back to Home Header Strip for Logged-Out Users on Sub-Pages */}
       {showBackToHome && (
-        <div className="bg-gradient-to-r from-[#FAF8F5] via-white to-white border-b border-[#5A3E2B]/10 px-6 lg:px-10 py-2.5 shadow-2xs">
+        <div className="bg-gradient-to-r from-[#FAF8F5] via-white to-white dark:from-[#141210] dark:via-[#161311] dark:to-[#141210] border-b border-[#5A3E2B]/10 dark:border-white/10 px-6 lg:px-10 py-2.5 shadow-2xs">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#5A3E2B] hover:text-[#D5851F] transition-all py-0.5 group"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#5A3E2B] dark:text-[#E8DCCF] hover:text-[#D5851F] dark:hover:text-[#E8952B] transition-all py-0.5 group"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#5A3E2B]/10 text-[#5A3E2B] group-hover:bg-[#D5851F] group-hover:text-white transition-colors">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#5A3E2B]/10 dark:bg-white/10 text-[#5A3E2B] dark:text-[#E8DCCF] group-hover:bg-[#D5851F] group-hover:text-white transition-colors">
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M15 19l-7-7 7-7" />
                 </svg>

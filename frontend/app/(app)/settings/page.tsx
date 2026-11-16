@@ -56,10 +56,10 @@ function saveSettings(s: Settings) {
 
 function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange: (v: boolean) => void; label: string; desc: string }) {
   return (
-    <label className="flex items-center justify-between rounded-xl bg-warm-paper/50 px-5 py-4 transition-colors hover:bg-warm-paper/80">
+    <label className="flex items-center justify-between rounded-xl bg-warm-paper/50 dark:bg-white/5 px-5 py-4 transition-colors hover:bg-warm-paper/80 dark:hover:bg-white/10 cursor-pointer">
       <div>
-        <p className="text-sm font-medium text-ink-navy">{label}</p>
-        <p className="text-xs text-slate-blue-400">{desc}</p>
+        <p className="text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">{label}</p>
+        <p className="text-xs text-slate-blue-400 dark:text-[#A8988B]">{desc}</p>
       </div>
       <button
         type="button"
@@ -68,7 +68,7 @@ function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange
         onClick={() => onChange(!enabled)}
         className={cn(
           "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors",
-          enabled ? "bg-signal-orange" : "bg-ink-navy/15"
+          enabled ? "bg-signal-orange" : "bg-ink-navy/15 dark:bg-white/20"
         )}
       >
         <span className={cn(
@@ -118,7 +118,7 @@ export default function SettingsPage() {
     const cloud = user?.user_metadata?.preferences;
     const base = cloud ? { ...local, ...cloud } : local;
     // Don't override darkMode from storage here — ThemeContext is the authority
-    setSettings(base);
+    setSettings({ ...base, darkMode: isDark });
     setSettingsLoaded(true);
 
     if (base.compactView) {
@@ -126,7 +126,12 @@ export default function SettingsPage() {
     } else {
       document.documentElement.classList.remove("compact-mode");
     }
-  }, [user]);
+  }, [user, isDark]);
+
+  // Keep settings.darkMode synchronized with ThemeContext
+  useEffect(() => {
+    setSettings((prev) => (prev.darkMode !== isDark ? { ...prev, darkMode: isDark } : prev));
+  }, [isDark]);
 
   // ── Persist + apply side effects on change ──────────────────────────
   const updateSetting = useCallback(<K extends keyof Settings>(key: K, val: Settings[K]) => {
@@ -364,30 +369,32 @@ export default function SettingsPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper">
+      <main className="flex-1 bg-gradient-to-b from-white to-warm-paper dark:from-[#0E0C0A] dark:to-[#161311]">
         <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-ink-navy/5">
-              <svg className="h-6 w-6 text-ink-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-ink-navy/5 dark:bg-white/5">
+              <svg className="h-6 w-6 text-ink-navy dark:text-[#F0E6DA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round">
                 <circle cx="12" cy="12" r="3" />
                 <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
               </svg>
             </div>
             <div>
-              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy">Settings</h1>
-              <p className="mt-0.5 text-sm text-slate-blue">Manage your preferences and account settings.</p>
+              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-navy dark:text-[#F0E6DA]">Settings</h1>
+              <p className="mt-0.5 text-sm text-slate-blue dark:text-[#C7B8AA]">Manage your preferences and account settings.</p>
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="mt-8 flex gap-1 rounded-lg bg-ink-navy/5 p-1">
+          <div className="mt-8 flex gap-1 rounded-lg bg-ink-navy/5 dark:bg-white/5 p-1">
             {tabs.map((t, i) => (
               <button
                 key={t}
                 onClick={() => setTab(i)}
                 className={cn(
-                  "flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all",
-                  tab === i ? "bg-white text-ink-navy shadow-sm" : "text-slate-blue hover:text-ink-navy"
+                  "flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all cursor-pointer",
+                  tab === i
+                    ? "bg-white dark:bg-[#1E1A16] text-ink-navy dark:text-[#F0E6DA] shadow-sm"
+                    : "text-slate-blue dark:text-[#A8988B] hover:text-ink-navy dark:hover:text-[#F0E6DA]"
                 )}
               >
                 {t}
@@ -397,7 +404,7 @@ export default function SettingsPage() {
 
           {/* Saved toast */}
           {saved && (
-            <div className="mt-4 flex items-center gap-2 rounded-xl bg-teal-50 border border-teal-100 px-4 py-2.5 text-xs font-semibold text-teal-700 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="mt-4 flex items-center gap-2 rounded-xl bg-teal-50 dark:bg-teal-900/30 border border-teal-100 dark:border-teal-800/40 px-4 py-2.5 text-xs font-semibold text-teal-700 dark:text-teal-300 animate-in fade-in slide-in-from-top-2 duration-300">
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7" /></svg>
               Settings saved
             </div>
@@ -406,32 +413,32 @@ export default function SettingsPage() {
           <div className="mt-6 space-y-5">
             {/* ── Notifications tab ─────────────────────────────────────── */}
             {tab === 0 && (
-              <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                <h2 className="font-display text-lg font-semibold text-ink-navy">Notification preferences</h2>
-                <p className="mt-1 text-sm text-slate-blue">Choose how and when we notify you about scheme updates.</p>
+              <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Notification preferences</h2>
+                <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Choose how and when we notify you about scheme updates.</p>
                 <div className="mt-5 space-y-3">
                   <Toggle enabled={settings.emailNotifs} onChange={(v) => updateSetting("emailNotifs", v)} label="Email notifications" desc="New matches, deadline reminders, application updates" />
                   <Toggle enabled={settings.smsNotifs} onChange={(v) => updateSetting("smsNotifs", v)} label="SMS alerts" desc="Critical deadline reminders and approval updates" />
                   <Toggle enabled={settings.pushNotifs} onChange={(v) => updateSetting("pushNotifs", v)} label="Push notifications" desc="Browser notifications for real-time updates" />
                 </div>
-                <div className="mt-5 border-t border-ink-navy/10 pt-5">
-                  <p className="text-sm font-medium text-ink-navy">Notification quiet hours</p>
-                  <p className="mt-1 text-xs text-slate-blue-400">No notifications will be sent during this period.</p>
+                <div className="mt-5 border-t border-ink-navy/10 dark:border-white/10 pt-5">
+                  <p className="text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">Notification quiet hours</p>
+                  <p className="mt-1 text-xs text-slate-blue-400 dark:text-[#A8988B]">No notifications will be sent during this period.</p>
                   <div className="mt-3 flex gap-3">
                     <select
                       value={settings.quietStart}
                       onChange={(e) => updateSetting("quietStart", parseInt(e.target.value))}
-                      className="rounded-lg border-2 border-ink-navy/15 bg-white px-3 py-2 text-sm text-ink-navy focus:border-signal-orange focus:outline-none"
+                      className="rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3 py-2 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none"
                     >
                       {Array.from({ length: 24 }, (_, i) => (
                         <option key={i} value={i}>{String(i).padStart(2, "0")}:00</option>
                       ))}
                     </select>
-                    <span className="flex items-center text-sm text-slate-blue-400">to</span>
+                    <span className="flex items-center text-sm text-slate-blue-400 dark:text-[#A8988B]">to</span>
                     <select
                       value={settings.quietEnd}
                       onChange={(e) => updateSetting("quietEnd", parseInt(e.target.value))}
-                      className="rounded-lg border-2 border-ink-navy/15 bg-white px-3 py-2 text-sm text-ink-navy focus:border-signal-orange focus:outline-none"
+                      className="rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3 py-2 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none"
                     >
                       {Array.from({ length: 24 }, (_, i) => (
                         <option key={i} value={i}>{String(i).padStart(2, "0")}:00</option>
@@ -444,28 +451,28 @@ export default function SettingsPage() {
 
             {/* ── Appearance tab ────────────────────────────────────────── */}
             {tab === 1 && (
-              <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                <h2 className="font-display text-lg font-semibold text-ink-navy">Appearance</h2>
-                <p className="mt-1 text-sm text-slate-blue">Customize how the dashboard looks.</p>
+              <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Appearance</h2>
+                <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Customize how the dashboard looks.</p>
                 <div className="mt-5 space-y-3">
                   <Toggle enabled={isDark} onChange={(v) => updateSetting("darkMode", v)} label="Dark mode" desc="Switch between light and dark theme" />
                   <div>
                     <Toggle enabled={settings.compactView} onChange={(v) => updateSetting("compactView", v)} label="Compact view" desc="Show more content with reduced spacing across citizen workspace" />
                     {settings.compactView && (
-                      <div className="mt-2.5 flex items-center gap-2 rounded-lg bg-signal-orange/10 px-3.5 py-2 text-xs font-semibold text-signal-orange border border-signal-orange/20 animate-in fade-in">
+                      <div className="mt-2.5 flex items-center gap-2 rounded-lg bg-signal-orange/10 dark:bg-signal-orange/20 px-3.5 py-2 text-xs font-semibold text-signal-orange border border-signal-orange/20 animate-in fade-in">
                         <span className="w-1.5 h-1.5 rounded-full bg-signal-orange animate-pulse" />
                         Compact view active: Denser cards, reduced padding & optimized workspace layout.
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="mt-5 border-t border-ink-navy/10 pt-5">
-                  <p className="text-sm font-medium text-ink-navy">Language</p>
-                  <p className="mt-1 text-xs text-slate-blue-400">Choose your preferred language for scheme information and AI Assistant.</p>
+                <div className="mt-5 border-t border-ink-navy/10 dark:border-white/10 pt-5">
+                  <p className="text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">Language</p>
+                  <p className="mt-1 text-xs text-slate-blue-400 dark:text-[#A8988B]">Choose your preferred language for scheme information and AI Assistant.</p>
                   <select
                     value={settings.language}
                     onChange={(e) => updateSetting("language", e.target.value)}
-                    className="mt-3 block w-full rounded-lg border-2 border-ink-navy/15 bg-white px-3.5 py-2.5 text-sm text-ink-navy focus:border-signal-orange focus:outline-none"
+                    className="mt-3 block w-full rounded-lg border-2 border-ink-navy/15 dark:border-white/15 bg-white dark:bg-[#1E1A16] px-3.5 py-2.5 text-sm text-ink-navy dark:text-[#F0E6DA] focus:border-signal-orange focus:outline-none"
                   >
                     <option value="en">English</option>
                     <option value="hi">Hindi (हिंदी)</option>
@@ -476,7 +483,7 @@ export default function SettingsPage() {
                     <option value="te">Telugu (తెలుగు)</option>
                     <option value="kn">Kannada (ಕನ್ನಡ)</option>
                   </select>
-                  <p className="mt-2 text-xs text-slate-blue-400">
+                  <p className="mt-2 text-xs text-slate-blue-400 dark:text-[#A8988B]">
                     Scheme summaries and SchemeFind AI responses will adapt to this language.
                   </p>
                 </div>
@@ -486,37 +493,37 @@ export default function SettingsPage() {
             {/* ── Privacy tab ───────────────────────────────────────────── */}
             {tab === 2 && (
               <div className="space-y-5">
-                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                  <h2 className="font-display text-lg font-semibold text-ink-navy">Privacy & data</h2>
-                  <p className="mt-1 text-sm text-slate-blue">Control how your data is used, stored, and shared.</p>
+                <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Privacy & data</h2>
+                  <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Control how your data is used, stored, and shared.</p>
                   <div className="mt-5 space-y-3">
                     <Toggle enabled={settings.shareData} onChange={(v) => updateSetting("shareData", v)} label="Scheme improvement data" desc="Share anonymized eligibility data to improve scheme matching accuracy" />
                     <Toggle enabled={settings.analytics} onChange={(v) => updateSetting("analytics", v)} label="Usage analytics" desc="Help us improve platform stability with anonymous performance metrics" />
                   </div>
-                  <div className="mt-5 rounded-xl bg-verified-teal/5 px-4 py-3">
+                  <div className="mt-5 rounded-xl bg-verified-teal/5 dark:bg-verified-teal/10 px-4 py-3 border border-verified-teal/20">
                     <div className="flex items-start gap-3">
                       <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-verified-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                         <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                       <div>
                         <p className="text-sm font-medium text-verified-teal">Your data is encrypted & sovereign</p>
-                        <p className="mt-0.5 text-xs text-slate-blue">All citizen profile records and documents are stored with AES-256 encryption. We never sell your data to third parties.</p>
+                        <p className="mt-0.5 text-xs text-slate-blue dark:text-[#C7B8AA]">All citizen profile records and documents are stored with AES-256 encryption. We never sell your data to third parties.</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Data Portability / Export */}
-                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                  <h2 className="font-display text-lg font-semibold text-ink-navy">Data Portability</h2>
-                  <p className="mt-1 text-sm text-slate-blue">Download a complete copy of all your citizen profile records, matched schemes, and preferences.</p>
+                <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Data Portability</h2>
+                  <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Download a complete copy of all your citizen profile records, matched schemes, and preferences.</p>
                   <div className="mt-4">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleExportData}
                       disabled={exporting}
-                      className="border-ink-navy/20 text-ink-navy hover:bg-warm-paper"
+                      className="border-ink-navy/20 dark:border-white/20 text-ink-navy dark:text-[#F0E6DA] hover:bg-warm-paper dark:hover:bg-white/5 cursor-pointer"
                     >
                       {exporting ? (
                         <>
@@ -535,7 +542,7 @@ export default function SettingsPage() {
                         </>
                       )}
                     </Button>
-                    <p className="mt-2 text-xs text-slate-blue-400">
+                    <p className="mt-2 text-xs text-slate-blue-400 dark:text-[#A8988B]">
                       Standard JSON format compliant with DPDP Act 2023 citizen rights.
                     </p>
                   </div>
@@ -546,9 +553,9 @@ export default function SettingsPage() {
             {/* ── Account tab ───────────────────────────────────────────── */}
             {tab === 3 && (
               <div className="space-y-5">
-                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                  <h2 className="font-display text-lg font-semibold text-ink-navy">Account details</h2>
-                  <p className="mt-1 text-sm text-slate-blue">Update your login information.</p>
+                <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Account details</h2>
+                  <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Update your login information.</p>
                   <div className="mt-5 space-y-4">
                     <Input label="Email address" type="email" defaultValue={user?.email || ""} disabled />
                     <div className="flex gap-3">
@@ -558,25 +565,25 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-ink-navy/10 bg-white p-6 shadow-sm">
-                  <h2 className="font-display text-lg font-semibold text-ink-navy">Sessions</h2>
-                  <p className="mt-1 text-sm text-slate-blue">Active login sessions across devices.</p>
+                <div className="rounded-2xl border border-ink-navy/10 dark:border-white/10 bg-white dark:bg-[#161311] p-6 shadow-sm">
+                  <h2 className="font-display text-lg font-semibold text-ink-navy dark:text-[#F0E6DA]">Sessions</h2>
+                  <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Active login sessions across devices.</p>
                   <div className="mt-4 space-y-3">
                     {[
                       { device: currentDevice, active: true, time: formatDateTime(user?.last_sign_in_at) },
                     ].map((s) => (
-                      <div key={s.device} className="flex items-center justify-between rounded-lg bg-warm-paper/50 px-4 py-3">
+                      <div key={s.device} className="flex items-center justify-between rounded-lg bg-warm-paper/50 dark:bg-white/5 px-4 py-3">
                         <div className="flex items-center gap-3">
-                          <div className={cn("h-2 w-2 rounded-full", s.active ? "bg-verified-teal" : "bg-ink-navy/15")} />
+                          <div className={cn("h-2 w-2 rounded-full", s.active ? "bg-verified-teal" : "bg-ink-navy/15 dark:bg-white/20")} />
                           <div>
-                            <p className="text-sm font-medium text-ink-navy">{s.device}</p>
-                            <p className="text-xs text-slate-blue-400">{s.time}</p>
+                            <p className="text-sm font-medium text-ink-navy dark:text-[#F0E6DA]">{s.device}</p>
+                            <p className="text-xs text-slate-blue-400 dark:text-[#A8988B]">{s.time}</p>
                           </div>
                         </div>
                         {s.active ? (
                           <button
                             onClick={() => setShowLogoutModal(true)}
-                            className="text-xs font-semibold text-rose-500 hover:text-rose-600 transition-colors"
+                            className="text-xs font-semibold text-rose-500 hover:text-rose-600 dark:text-rose-400 transition-colors cursor-pointer"
                           >
                             Logout
                           </button>
@@ -588,21 +595,21 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-caution-amber/20 bg-white p-6 shadow-sm">
+                <div className="rounded-2xl border border-caution-amber/20 dark:border-caution-amber/30 bg-white dark:bg-[#161311] p-6 shadow-sm">
                   <div className="flex items-start gap-3">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-caution-amber/10">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-caution-amber/10 dark:bg-caution-amber/20">
                       <svg className="h-4 w-4 text-caution-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                         <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                       </svg>
                     </div>
                     <div>
-                      <h2 className="font-display text-base font-semibold text-ink-navy">Danger zone</h2>
-                      <p className="mt-1 text-sm text-slate-blue">Permanently delete your account and all associated data.</p>
+                      <h2 className="font-display text-base font-semibold text-ink-navy dark:text-[#F0E6DA]">Danger zone</h2>
+                      <p className="mt-1 text-sm text-slate-blue dark:text-[#C7B8AA]">Permanently delete your account and all associated data.</p>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setShowDeleteModal(true)}
-                        className="mt-3 border-caution-amber/30 text-caution-amber hover:bg-caution-amber/5"
+                        className="mt-3 border-caution-amber/30 text-caution-amber hover:bg-caution-amber/5 dark:hover:bg-caution-amber/10 cursor-pointer"
                       >
                         Delete account
                       </Button>
@@ -619,22 +626,22 @@ export default function SettingsPage() {
 
       {/* Logout Modal */}
       {showLogoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-100 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
-            <h3 className="font-display text-lg font-bold text-ink-navy">Confirm Logout</h3>
-            <p className="mt-2 text-sm text-slate-blue leading-relaxed">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A1613] border border-slate-100 dark:border-white/15 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            <h3 className="font-display text-lg font-bold text-ink-navy dark:text-[#F0E6DA]">Confirm Logout</h3>
+            <p className="mt-2 text-sm text-slate-blue dark:text-[#C7B8AA] leading-relaxed">
               Are you sure you want to log out of this session?
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setShowLogoutModal(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+                className="rounded-xl border border-slate-200 dark:border-white/15 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-[#C7B8AA] hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleLogoutConfirm}
-                className="rounded-xl bg-rose-500 px-4 py-2 text-xs font-bold text-white hover:bg-rose-600 transition-all shadow-sm"
+                className="rounded-xl bg-rose-500 px-4 py-2 text-xs font-bold text-white hover:bg-rose-600 transition-all shadow-sm cursor-pointer"
               >
                 Logout
               </button>
@@ -645,26 +652,26 @@ export default function SettingsPage() {
 
       {/* Delete Account Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-100 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A1613] border border-slate-100 dark:border-white/15 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
             <h3 className="font-display text-lg font-bold text-caution-amber">Delete Account</h3>
-            <p className="mt-2 text-sm text-slate-blue leading-relaxed">
+            <p className="mt-2 text-sm text-slate-blue dark:text-[#C7B8AA] leading-relaxed">
               This action is permanent and cannot be undone. All your documents, matches, and account records will be permanently erased.
             </p>
             {deleteError && (
-              <p className="mt-3 text-xs text-rose-500 bg-rose-50 p-2 rounded-lg border border-rose-100">{deleteError}</p>
+              <p className="mt-3 text-xs text-rose-500 bg-rose-50 dark:bg-rose-950/40 p-2 rounded-lg border border-rose-100 dark:border-rose-900/40">{deleteError}</p>
             )}
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+                className="rounded-xl border border-slate-200 dark:border-white/15 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-[#C7B8AA] hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer"
                 disabled={deleteBusy}
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="rounded-xl bg-caution-amber px-4 py-2 text-xs font-bold text-white hover:bg-amber-600 transition-all shadow-sm"
+                className="rounded-xl bg-caution-amber px-4 py-2 text-xs font-bold text-white hover:bg-amber-600 transition-all shadow-sm cursor-pointer"
                 disabled={deleteBusy}
               >
                 {deleteBusy ? "Deleting…" : "Delete Account"}
@@ -676,10 +683,10 @@ export default function SettingsPage() {
 
       {/* Change Password Modal */}
       {showPasswordModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-100 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
-            <h3 className="font-display text-lg font-bold text-ink-navy">Change Password</h3>
-            <p className="mt-1 text-xs text-slate-blue-400 mb-4">Enter and confirm your new password below.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A1613] border border-slate-100 dark:border-white/15 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            <h3 className="font-display text-lg font-bold text-ink-navy dark:text-[#F0E6DA]">Change Password</h3>
+            <p className="mt-1 text-xs text-slate-blue-400 dark:text-[#A8988B] mb-4">Enter and confirm your new password below.</p>
 
             <div className="space-y-3">
               <Input
@@ -701,23 +708,23 @@ export default function SettingsPage() {
             </div>
 
             {passwordError && (
-              <p className="mt-3 text-xs text-rose-500 bg-rose-50 p-2 rounded-lg border border-rose-100">{passwordError}</p>
+              <p className="mt-3 text-xs text-rose-500 bg-rose-50 dark:bg-rose-950/40 p-2 rounded-lg border border-rose-100 dark:border-rose-900/40">{passwordError}</p>
             )}
             {passwordSuccess && (
-              <p className="mt-3 text-xs text-teal-600 bg-teal-50 p-2 rounded-lg border border-teal-100">✓ Password successfully updated!</p>
+              <p className="mt-3 text-xs text-teal-600 bg-teal-50 dark:bg-teal-950/40 p-2 rounded-lg border border-teal-100 dark:border-teal-900/40">✓ Password successfully updated!</p>
             )}
 
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setShowPasswordModal(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+                className="rounded-xl border border-slate-200 dark:border-white/15 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-[#C7B8AA] hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer"
                 disabled={passwordBusy}
               >
                 Cancel
               </button>
               <button
                 onClick={handlePasswordChange}
-                className="rounded-xl bg-signal-orange px-4 py-2 text-xs font-bold text-white hover:bg-orange-600 transition-all shadow-sm"
+                className="rounded-xl bg-signal-orange px-4 py-2 text-xs font-bold text-white hover:bg-orange-600 transition-all shadow-sm cursor-pointer"
                 disabled={passwordBusy}
               >
                 {passwordBusy ? "Updating…" : "Change Password"}
@@ -729,10 +736,10 @@ export default function SettingsPage() {
 
       {/* Update Email Modal */}
       {showEmailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-100 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
-            <h3 className="font-display text-lg font-bold text-ink-navy">Update Email</h3>
-            <p className="mt-1 text-xs text-slate-blue-400 mb-4">A confirmation link will be sent to your new email address.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-navy/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A1613] border border-slate-100 dark:border-white/15 p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            <h3 className="font-display text-lg font-bold text-ink-navy dark:text-[#F0E6DA]">Update Email</h3>
+            <p className="mt-1 text-xs text-slate-blue-400 dark:text-[#A8988B] mb-4">A confirmation link will be sent to your new email address.</p>
 
             <Input
               label="New Email Address"
@@ -744,23 +751,23 @@ export default function SettingsPage() {
             />
 
             {emailError && (
-              <p className="mt-3 text-xs text-rose-500 bg-rose-50 p-2 rounded-lg border border-rose-100">{emailError}</p>
+              <p className="mt-3 text-xs text-rose-500 bg-rose-50 dark:bg-rose-950/40 p-2 rounded-lg border border-rose-100 dark:border-rose-900/40">{emailError}</p>
             )}
             {emailSuccess && (
-              <p className="mt-3 text-xs text-teal-600 bg-teal-50 p-2 rounded-lg border border-teal-100">✓ Confirmation email sent! Check your inbox.</p>
+              <p className="mt-3 text-xs text-teal-600 bg-teal-50 dark:bg-teal-950/40 p-2 rounded-lg border border-teal-100 dark:border-teal-900/40">✓ Confirmation email sent! Check your inbox.</p>
             )}
 
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setShowEmailModal(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+                className="rounded-xl border border-slate-200 dark:border-white/15 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-[#C7B8AA] hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer"
                 disabled={emailBusy}
               >
                 Cancel
               </button>
               <button
                 onClick={handleEmailUpdate}
-                className="rounded-xl bg-signal-orange px-4 py-2 text-xs font-bold text-white hover:bg-orange-600 transition-all shadow-sm"
+                className="rounded-xl bg-signal-orange px-4 py-2 text-xs font-bold text-white hover:bg-orange-600 transition-all shadow-sm cursor-pointer"
                 disabled={emailBusy}
               >
                 {emailBusy ? "Sending…" : "Update Email"}
