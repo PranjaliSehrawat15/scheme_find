@@ -16,10 +16,25 @@ const ThemeContext = createContext<ThemeContextType>({
   setTheme: () => {},
 });
 
+function applyTheme(dark: boolean) {
+  document.documentElement.classList.toggle("dark", dark);
+}
+
+function persistTheme(dark: boolean) {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    const settings = raw ? JSON.parse(raw) : {};
+    settings.darkMode = dark;
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch {
+    // Ignore localStorage write errors
+  }
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(false);
 
-  // Initialize theme on client mount
+  // Initialize theme on client mount from persisted storage or system preference
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SETTINGS_KEY);
@@ -27,18 +42,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const parsed = JSON.parse(raw);
         if (typeof parsed.darkMode === "boolean") {
           setIsDark(parsed.darkMode);
-          if (parsed.darkMode) {
-            document.documentElement.classList.add("dark");
-          } else {
-            document.documentElement.classList.remove("dark");
-          }
+          applyTheme(parsed.darkMode);
           return;
         }
       }
       // System preference fallback
-      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
         setIsDark(true);
-        document.documentElement.classList.add("dark");
+        applyTheme(true);
       }
     } catch {
       // Fallback to light
@@ -47,51 +58,40 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = useCallback((dark: boolean) => {
     setIsDark(dark);
-    if (typeof document !== "undefined") {
-      if (dark) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
-    try {
-      const raw = localStorage.getItem(SETTINGS_KEY);
-      const settings = raw ? JSON.parse(raw) : {};
-      settings.darkMode = dark;
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-    } catch {
-      // Ignore localStorage write error
-    }
-    // Defer dispatch so React finishes render pass cleanly
+    applyTheme(dark);
+    persistTheme(dark);
+    // Defer dispatch so React finishes current render pass cleanly
     setTimeout(() => {
-      window.dispatchEvent(new Event("schemefind_theme_change"));
+      window.dispatchEvent(new CustomEvent("schemefind_theme_change", { detail: { dark } }));
     }, 10);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    // Read truth directly from DOM to avoid stale closure
-    const currentIsDark =
-      typeof document !== "undefined"
-        ? document.documentElement.classList.contains("dark")
-        : isDark;
-    const next = !currentIsDark;
-    setTheme(next);
+    // isDark is in the dependency array — closure is always fresh
+    setTheme(!isDark);
   }, [isDark, setTheme]);
 
-  // Listen for sync from other tabs or other components
+  // Cross-tab synchronization: storage events fire in OTHER tabs only
   useEffect(() => {
-    const handleSync = () => {
+    const handleStorageEvent = () => {
       try {
-        const isHtmlDark = document.documentElement.classList.contains("dark");
-        setIsDark(isHtmlDark);
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (typeof parsed.darkMode === "boolean") {
+            setIsDark(parsed.darkMode);
+            applyTheme(parsed.darkMode);
+          }
+        }
       } catch {}
     };
 
-    window.addEventListener("storage", handleSync);
-    window.addEventListener("schemefind_theme_change", handleSync);
+    // Only listen to native storage (cross-tab). The custom event is for
+    // same-tab component sync and should NOT loop back into this handler
+    // to avoid infinite dispatch cycles.
+    window.addEventListener("storage", handleStorageEvent);
     return () => {
-      window.removeEventListener("storage", handleSync);
-      window.removeEventListener("schemefind_theme_change", handleSync);
+      window.removeEventListener("storage", handleStorageEvent);
     };
   }, []);
 

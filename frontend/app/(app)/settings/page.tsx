@@ -90,11 +90,6 @@ export default function SettingsPage() {
   const { session, user, signOut } = useAuth();
   const [currentDevice, setCurrentDevice] = useState("Chrome on Windows");
 
-  // Keep settings.darkMode in sync with ThemeContext
-  useEffect(() => {
-    setSettings((prev) => ({ ...prev, darkMode: isDark }));
-  }, [isDark]);
-
   // ── Modal states ────────────────────────────────────────────────────
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -122,38 +117,38 @@ export default function SettingsPage() {
     const local = loadSettings();
     const cloud = user?.user_metadata?.preferences;
     const base = cloud ? { ...local, ...cloud } : local;
-    const effective = { ...base, darkMode: isDark };
-    setSettings(effective);
+    // Don't override darkMode from storage here — ThemeContext is the authority
+    setSettings(base);
     setSettingsLoaded(true);
 
-    if (effective.compactView) {
+    if (base.compactView) {
       document.documentElement.classList.add("compact-mode");
     } else {
       document.documentElement.classList.remove("compact-mode");
     }
-  }, [user, isDark]);
+  }, [user]);
 
   // ── Persist + apply side effects on change ──────────────────────────
   const updateSetting = useCallback(<K extends keyof Settings>(key: K, val: Settings[K]) => {
+    // Calculate next state outside updater to avoid impure side-effects inside setState
+    setSettings((prev) => ({ ...prev, [key]: val }));
+
+    // Side effects executed cleanly outside the state updater
     setSettings((prev) => {
       const next = { ...prev, [key]: val };
       saveSettings(next);
 
-      // 1. Immediately toggle dark mode via ThemeContext
+      // 1. Dark mode — delegate entirely to ThemeContext
       if (key === "darkMode") {
         setThemeContext(val as boolean);
       }
 
-      // 2. Immediately toggle compact-mode class
+      // 2. Compact view — DOM class toggle
       if (key === "compactView") {
-        if (val) {
-          document.documentElement.classList.add("compact-mode");
-        } else {
-          document.documentElement.classList.remove("compact-mode");
-        }
+        document.documentElement.classList.toggle("compact-mode", Boolean(val));
       }
 
-      // 3. Sync to Supabase user cloud metadata if logged in
+      // 3. Sync to Supabase user cloud metadata if logged in (outside updater scope is fine as a closure)
       if (user?.id) {
         import("@/lib/supabase").then(({ supabase }) => {
           if (supabase) {
@@ -453,7 +448,7 @@ export default function SettingsPage() {
                 <h2 className="font-display text-lg font-semibold text-ink-navy">Appearance</h2>
                 <p className="mt-1 text-sm text-slate-blue">Customize how the dashboard looks.</p>
                 <div className="mt-5 space-y-3">
-                  <Toggle enabled={isDark} onChange={(v) => { setThemeContext(v); updateSetting("darkMode", v); }} label="Dark mode" desc="Switch between light and dark theme" />
+                  <Toggle enabled={isDark} onChange={(v) => updateSetting("darkMode", v)} label="Dark mode" desc="Switch between light and dark theme" />
                   <div>
                     <Toggle enabled={settings.compactView} onChange={(v) => updateSetting("compactView", v)} label="Compact view" desc="Show more content with reduced spacing across citizen workspace" />
                     {settings.compactView && (
