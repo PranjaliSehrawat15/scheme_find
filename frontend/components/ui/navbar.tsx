@@ -39,11 +39,11 @@ export function Navbar() {
 
   const initials = user?.user_metadata?.full_name
     ? (user.user_metadata.full_name as string)
-        .split(" ")
-        .map((n: string) => n[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase()
+      .split(" ")
+      .map((n: string) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase()
     : user?.email?.[0]?.toUpperCase() ?? "U";
 
   async function handleSignOut() {

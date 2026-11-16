@@ -300,115 +300,141 @@
 }
 
 /* ==========================================================================
-   SchemeFind Dark Mode System (Warm Espresso & Obsidian Theme)
+   SchemeFind Dark Mode System — Premium Obsidian & Warm Espresso Theme
    ========================================================================== */
 
+/* ── Design Tokens ── */
 html.dark {
   color-scheme: dark;
-
-  /* Semantic Core Palette Overrides */
-  --color-warm-paper: #12100E;
-  --color-walnut-brown: #F5EBE1;
-  --color-ink-navy: #F5EBE1;
-  --color-slate-blue: #C7B8AA;
+  --color-warm-paper: #0E0C0A;
+  --color-walnut-brown: #F0E6DA;
+  --color-ink-navy: #F0E6DA;
+  --color-slate-blue: #C4B4A6;
   --color-amber-glow: #E8952B;
   --color-sage-green: #9CC27D;
+  --color-signal-orange: #E8952B;
+  --color-verified-teal: #9CC27D;
 }
 
-/* Base Body in Dark Mode */
+/* ── Base Layer ── */
 html.dark body {
-  background-color: #12100E !important;
-  color: #F5EBE1 !important;
+  background-color: #0E0C0A !important;
+  color: #F0E6DA !important;
 }
 
-/* Smooth theme transitions */
-body, header, nav, main, section, footer, div, a, button, input, textarea {
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+/* Smooth, polished transitions on every painted element */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- 1. Surfaces & Backgrounds --- */
+/* ══════════════════════════════════════════════════════════════════════════
+   1. BACKGROUND SURFACES
+   ══════════════════════════════════════════════════════════════════════════ */
 
-/* Page Backgrounds (#FAF8F5 / warm-paper) */
+/* Deepest page canvas */
 html.dark .bg-warm-paper,
-html.dark .bg-\[\#FAF8F5\],
-html.dark [class*="bg-[#FAF8F5]"]:not([class*="bg-[#FAF8F5]/"]):not([class*="hover:"]) {
-  background-color: #12100E !important;
+html.dark .bg-\[\#FAF8F5\] {
+  background-color: #0E0C0A !important;
 }
 
-/* Translucent Page Backgrounds (e.g. bg-[#FAF8F5]/95 on navbar / sticky headers) */
-html.dark header.bg-\[\#FAF8F5\]\/95,
+/* Navbar & sticky header glass */
+html.dark header,
 html.dark .bg-\[\#FAF8F5\]\/95,
-html.dark [class*="bg-[#FAF8F5]/95"] {
-  background-color: rgba(18, 16, 14, 0.95) !important;
-  backdrop-filter: blur(12px) !important;
+html.dark header.bg-\[\#FAF8F5\]\/95 {
+  background-color: rgba(14, 12, 10, 0.92) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom-color: rgba(232, 149, 43, 0.12) !important;
 }
 
-/* Cards & Surfaces (White -> Dark Roasted Espresso #1C1917) */
-html.dark .bg-white {
-  background-color: #1C1917 !important;
+/* Primary surface elevation 1 — cards, panels */
+html.dark .bg-white,
+html.dark .bg-white\/95 {
+  background-color: #1A1714 !important;
 }
 
-/* Page Gradients & Linear Surfaces (Neutralize light gradients in Dark Mode) */
-html.dark [class*="bg-gradient-to-b from-white to-warm-paper"],
-html.dark main.bg-gradient-to-b,
-html.dark .bg-gradient-to-b.from-white.to-warm-paper {
-  background-image: linear-gradient(to bottom, #161311, #12100E) !important;
-  background-color: #12100E !important;
-}
-
-html.dark [class*="bg-gradient-to-r from-[#FAF8F5] via-[#F4F7F1] to-white"],
-html.dark [class*="bg-gradient-to-r from-[#FAF8F5] via-white to-white"] {
-  background-image: linear-gradient(to right, #161311, #1A1714, #181512) !important;
-  background-color: #161311 !important;
-}
-
-html.dark .from-white {
-  --tw-gradient-from: #161311 !important;
-}
-
-html.dark .to-warm-paper {
-  --tw-gradient-to: #12100E !important;
-}
-
-html.dark .via-\[\#F4F7F1\] {
-  --tw-gradient-stops: var(--tw-gradient-from), #1A1714, var(--tw-gradient-to) !important;
-}
-
-/* Toggle switch knob stays crisp white */
-html.dark button[role="switch"] span.bg-white {
-  background-color: #FFFFFF !important;
-}
-
-/* Light tinted surfaces (slate-50, gray-50, warm-paper/50, etc.) */
+/* Secondary surface elevation 2 — nested cards, table rows */
 html.dark .bg-slate-50,
 html.dark .bg-gray-50,
 html.dark .bg-neutral-50,
 html.dark .bg-zinc-50,
-html.dark .bg-slate-100\/50,
-html.dark .bg-slate-100\/80,
 html.dark .bg-warm-paper\/50,
-html.dark .bg-warm-paper\/80 {
-  background-color: #24201D !important;
+html.dark .bg-warm-paper\/80,
+html.dark .bg-slate-100\/50,
+html.dark .bg-slate-100\/80 {
+  background-color: #231F1B !important;
 }
 
-/* Subtle secondary backgrounds (slate-100, gray-100, etc.) */
+/* Tertiary / Chip / Tag / Row backgrounds */
 html.dark .bg-slate-100,
 html.dark .bg-gray-100,
 html.dark .bg-neutral-100 {
-  background-color: #2A2521 !important;
+  background-color: #2D2822 !important;
 }
 
-/* --- 2. Typography & Text Colors --- */
+/* Profile avatar background */
+html.dark .bg-gradient-to-br.from-signal-orange\/20,
+html.dark [class*="from-signal-orange/20"] {
+  background-image: linear-gradient(to bottom right, rgba(232, 149, 43, 0.25), rgba(232, 149, 43, 0.08)) !important;
+}
 
-/* Primary Headings & Bold Text */
+/* ── Page & Strip Gradients ── */
+
+/* Full-page gradients used on Profile, Documents, Settings, Dashboard loading etc */
+html.dark .bg-gradient-to-b.from-white.to-warm-paper,
+html.dark [class*="bg-gradient-to-b from-white to-warm-paper"],
+html.dark main.bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, #131110, #0E0C0A) !important;
+  background-color: #0E0C0A !important;
+}
+
+/* "Back to Dashboard" and "Back to Home" header strips */
+html.dark .bg-gradient-to-r.from-\[\#FAF8F5\].via-\[\#F4F7F1\].to-white,
+html.dark .bg-gradient-to-r.from-\[\#FAF8F5\].via-white.to-white,
+html.dark [class*="bg-gradient-to-r from-[#FAF8F5]"] {
+  background-image: none !important;
+  background-color: #161210 !important;
+  border-bottom-color: rgba(232, 149, 43, 0.10) !important;
+}
+
+/* CSS custom property gradient overrides for Tailwind v4 */
+html.dark .from-white {
+  --tw-gradient-from: #131110 !important;
+  --tw-gradient-from-position: 0% !important;
+}
+html.dark .to-warm-paper {
+  --tw-gradient-to: #0E0C0A !important;
+}
+html.dark .via-\[\#F4F7F1\] {
+  --tw-gradient-via: #1A1714 !important;
+}
+
+/* Chat page outer container */
+html.dark .bg-gradient-to-b.from-\[\#FAF8F5\].to-\[\#F4F7F1\],
+html.dark [class*="bg-gradient-to-b from-[#FAF8F5] to-[#F4F7F1]"] {
+  background-image: linear-gradient(to bottom, #131110, #0E0C0A) !important;
+}
+
+/* Chat input footer bar */
+html.dark .bg-white\/95 {
+  background-color: rgba(26, 23, 20, 0.97) !important;
+  border-top-color: rgba(245, 235, 225, 0.08) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. TYPOGRAPHY
+   ══════════════════════════════════════════════════════════════════════════ */
+
 html.dark .text-ink-navy,
 html.dark .text-walnut-brown,
 html.dark .text-\[\#5A3E2B\],
 html.dark [class*="text-[#5A3E2B]"]:not([class*="text-[#5A3E2B]/"]):not([class*="hover:"]) {
-  color: #F5EBE1 !important;
+  color: #F0E6DA !important;
 }
 
-/* High-contrast body text */
 html.dark .text-slate-900,
 html.dark .text-slate-800,
 html.dark .text-slate-700,
@@ -418,22 +444,21 @@ html.dark .text-gray-700,
 html.dark .text-neutral-900,
 html.dark .text-neutral-800,
 html.dark .text-neutral-700 {
-  color: #F0E5D8 !important;
+  color: #EDE0D2 !important;
 }
 
-/* Secondary / Medium Contrast Text */
 html.dark .text-\[\#6E5748\],
 html.dark .text-\[\#5A3E2B\]\/85,
 html.dark .text-\[\#5A3E2B\]\/80,
 html.dark .text-\[\#5A3E2B\]\/75,
 html.dark .text-\[\#5A3E2B\]\/70,
+html.dark .text-slate-700,
 html.dark .text-slate-600,
 html.dark .text-gray-600,
 html.dark .text-neutral-600 {
-  color: #D4C5B8 !important;
+  color: #CEBEAF !important;
 }
 
-/* Muted / Caption / Metadata Text */
 html.dark .text-\[\#5A3E2B\]\/60,
 html.dark .text-\[\#5A3E2B\]\/50,
 html.dark .text-\[\#5A3E2B\]\/40,
@@ -443,16 +468,32 @@ html.dark .text-gray-500,
 html.dark .text-gray-400,
 html.dark .text-neutral-500,
 html.dark .text-neutral-400 {
-  color: #9E8E80 !important;
+  color: #96867A !important;
 }
 
-/* --- 3. Borders & Dividers --- */
+/* Keep amber/orange accent text vibrant */
+html.dark .text-signal-orange,
+html.dark .text-\[\#D5851F\],
+html.dark .text-amber-glow {
+  color: #E8952B !important;
+}
+
+/* Keep sage/teal accent text vibrant */
+html.dark .text-verified-teal,
+html.dark .text-sage-green,
+html.dark .text-\[\#87A96B\] {
+  color: #9CC27D !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. BORDERS & DIVIDERS
+   ══════════════════════════════════════════════════════════════════════════ */
 
 html.dark .border-\[\#5A3E2B\]\/10,
 html.dark .border-\[\#5A3E2B\]\/15,
 html.dark .border-\[\#5A3E2B\]\/20,
 html.dark [class*="border-[#5A3E2B]"]:not([class*="border-l-[#5A3E2B]"]):not([class*="hover:"]) {
-  border-color: rgba(245, 235, 225, 0.12) !important;
+  border-color: rgba(240, 230, 218, 0.11) !important;
 }
 
 html.dark .border-slate-100,
@@ -462,43 +503,57 @@ html.dark .border-gray-200,
 html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
 html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
 html.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
-  border-color: rgba(245, 235, 225, 0.10) !important;
+  border-color: rgba(240, 230, 218, 0.09) !important;
 }
 
-/* --- 4. Interactive & Hover States --- */
+/* Border-top on sticky settings/save bar */
+html.dark .border-ink-navy\/10 {
+  border-color: rgba(240, 230, 218, 0.10) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. INTERACTIVE & HOVER STATES
+   ══════════════════════════════════════════════════════════════════════════ */
 
 html.dark .hover\:bg-\[\#5A3E2B\]\/5:hover,
 html.dark [class*="hover:bg-[#5A3E2B]/5"]:hover,
 html.dark [class*="hover:bg-[#5A3E2B]/10"]:hover {
-  background-color: rgba(245, 235, 225, 0.08) !important;
+  background-color: rgba(240, 230, 218, 0.07) !important;
 }
 
 html.dark .hover\:bg-\[\#FAF8F5\]:hover {
-  background-color: #26221E !important;
+  background-color: #252019 !important;
 }
 
 html.dark .hover\:bg-slate-50:hover,
 html.dark .hover\:bg-gray-50:hover {
-  background-color: #24201D !important;
+  background-color: #231F1B !important;
+}
+
+html.dark .hover\:bg-\[\#87A96B\]\/10:hover {
+  background-color: rgba(156, 194, 125, 0.12) !important;
 }
 
 html.dark .hover\:text-\[\#5A3E2B\]:hover {
   color: #FFFFFF !important;
 }
 
-/* Active Nav Links */
-html.dark .bg-\[\#D5851F\]\/10 {
-  background-color: rgba(232, 149, 43, 0.18) !important;
+/* Active nav link highlight */
+html.dark .bg-\[\#D5851F\]\/10,
+html.dark .bg-\[\#5A3E2B\]\/10 {
+  background-color: rgba(232, 149, 43, 0.14) !important;
 }
 
-/* --- 5. Form Inputs, Selects, and Textareas --- */
+/* ══════════════════════════════════════════════════════════════════════════
+   5. FORM INPUTS
+   ══════════════════════════════════════════════════════════════════════════ */
 
 html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
 html.dark textarea,
 html.dark select {
-  background-color: #1C1917 !important;
-  color: #F5EBE1 !important;
-  border-color: rgba(245, 235, 225, 0.18) !important;
+  background-color: #1A1714 !important;
+  color: #F0E6DA !important;
+  border-color: rgba(240, 230, 218, 0.16) !important;
 }
 
 html.dark input:focus,
@@ -506,92 +561,182 @@ html.dark textarea:focus,
 html.dark select:focus {
   border-color: #E8952B !important;
   outline-color: #E8952B !important;
-  box-shadow: 0 0 0 3px rgba(232, 149, 43, 0.25) !important;
+  box-shadow: 0 0 0 3px rgba(232, 149, 43, 0.22) !important;
 }
 
 html.dark input::placeholder,
 html.dark textarea::placeholder {
-  color: #8C7D70 !important;
+  color: #7A6B5F !important;
 }
 
-/* --- 6. Elevated Components: Modals, Popups, Dropdowns --- */
-
-html.dark .shadow-sm,
-html.dark .shadow-xs {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.05) !important;
+/* Toggle switch knob stays white regardless */
+html.dark button[role="switch"] span,
+html.dark button[role="switch"] > span {
+  background-color: #FFFFFF !important;
 }
 
-html.dark .shadow-md,
+/* ══════════════════════════════════════════════════════════════════════════
+   6. SHADOWS & ELEVATION
+   ══════════════════════════════════════════════════════════════════════════ */
+
+html.dark .shadow-xs,
+html.dark .shadow-sm {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+html.dark .shadow-md {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
 html.dark .shadow-lg,
 html.dark .shadow-xl,
 html.dark .shadow-2xl {
-  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.07) !important;
 }
 
-/* Dropdown menus & popup dialogs */
+/* ══════════════════════════════════════════════════════════════════════════
+   7. ELEVATED MODALS, DROPDOWNS, POPUPS
+   ══════════════════════════════════════════════════════════════════════════ */
+
 html.dark .rounded-xl.bg-white.shadow-lg,
 html.dark .rounded-xl.bg-white.shadow-xl,
 html.dark .rounded-2xl.bg-white.shadow-xl,
 html.dark .rounded-2xl.bg-white.shadow-2xl,
 html.dark [class*="absolute"][class*="bg-white"] {
-  background-color: #221E1A !important;
-  border-color: rgba(245, 235, 225, 0.15) !important;
+  background-color: #201C18 !important;
+  border-color: rgba(240, 230, 218, 0.14) !important;
 }
 
-/* --- 7. Floating Chat & Assistant Window --- */
-
-html.dark .bg-\[\#FAF8F5\] {
-  background-color: #12100E !important;
+/* Modal dialog itself */
+html.dark [class*="fixed"][class*="bg-white"],
+html.dark [class*="fixed"][class*="inset-0"] > div[class*="bg-white"],
+html.dark [class*="fixed"][class*="inset-0"] > div[class*="rounded-"][class*="bg-white"] {
+  background-color: #201C18 !important;
+  border-color: rgba(240, 230, 218, 0.14) !important;
 }
 
-/* Assistant message card in floating chat */
+/* ══════════════════════════════════════════════════════════════════════════
+   8. CHAT PAGE — AI ASSISTANT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Category suggestion cards */
+html.dark [class*="bg-white/90"],
+html.dark .bg-white\/90 {
+  background-color: rgba(26, 23, 20, 0.95) !important;
+  border-color: rgba(232, 149, 43, 0.20) !important;
+}
+
+/* Query button chips (peach/orange tint → dark espresso) */
+html.dark .bg-\[\#D5851F\]\/10,
+html.dark [class*="bg-[#D5851F]/10"] {
+  background-color: rgba(232, 149, 43, 0.14) !important;
+  border-color: rgba(232, 149, 43, 0.22) !important;
+  color: #E8952B !important;
+}
+
+/* Category card heading text */
+html.dark [class*="border-[#D5851F]/25"] {
+  border-color: rgba(232, 149, 43, 0.22) !important;
+}
+
+/* AI message bubble */
 html.dark .bg-white.border.border-\[\#5A3E2B\]\/10 {
-  background-color: #1C1917 !important;
-  border-color: rgba(245, 235, 225, 0.12) !important;
+  background-color: #1A1714 !important;
+  border-color: rgba(240, 230, 218, 0.11) !important;
+  color: #F0E6DA !important;
+}
+
+/* User message bubble */
+html.dark .bg-gradient-to-r.from-\[\#5A3E2B\].to-\[\#483122\] {
+  background-image: linear-gradient(to right, #3D2B1F, #2D1F14) !important;
   color: #F5EBE1 !important;
 }
 
-/* User chat message */
-html.dark .bg-gradient-to-r.from-\[\#5A3E2B\].to-\[\#483122\] {
-  background-image: linear-gradient(to right, #4A3323, #362417) !important;
-  color: #FFFFFF !important;
+/* Loading shimmer */
+html.dark .bg-slate-200,
+html.dark .bg-orange-500\/20 {
+  background-color: #2D2822 !important;
 }
 
-/* --- 8. Category Filter Badges & Cards --- */
+/* ══════════════════════════════════════════════════════════════════════════
+   9. DOCUMENT VAULT — orange/green status pills
+   ══════════════════════════════════════════════════════════════════════════ */
 
-html.dark .border-\[\#5A3E2B\]\/15.bg-white {
-  background-color: #1C1917 !important;
-  border-color: rgba(245, 235, 225, 0.12) !important;
-  color: #D4C5B8 !important;
-}
+html.dark .bg-orange-50 { background-color: rgba(232, 149, 43, 0.12) !important; }
+html.dark .border-orange-200 { border-color: rgba(232, 149, 43, 0.25) !important; }
+html.dark .text-orange-500,
+html.dark .text-orange-600 { color: #E8952B !important; }
 
-html.dark .bg-\[\#5A3E2B\]\/10 {
-  background-color: rgba(245, 235, 225, 0.10) !important;
-}
+html.dark .bg-teal-50,
+html.dark .bg-green-50 { background-color: rgba(156, 194, 125, 0.10) !important; }
+html.dark .border-teal-100,
+html.dark .border-teal-200 { border-color: rgba(156, 194, 125, 0.22) !important; }
+html.dark .text-teal-700,
+html.dark .text-teal-600,
+html.dark .text-green-700,
+html.dark .text-green-600 { color: #9CC27D !important; }
 
-/* Category pill active for 'All' */
-html.dark .border-\[\#5A3E2B\].bg-\[\#5A3E2B\] {
-  background-color: #E8952B !important;
-  border-color: #E8952B !important;
-  color: #12100E !important;
-}
+html.dark .bg-red-50 { background-color: rgba(220, 80, 60, 0.10) !important; }
+html.dark .border-red-100,
+html.dark .border-red-200 { border-color: rgba(220, 80, 60, 0.22) !important; }
+html.dark .text-red-600,
+html.dark .text-red-700 { color: #E87070 !important; }
+html.dark .hover\:bg-red-50:hover { background-color: rgba(220, 80, 60, 0.12) !important; }
 
-/* Category badges text contrast in dark mode */
+/* ══════════════════════════════════════════════════════════════════════════
+   10. DASHBOARD — scheme cards, filter pills
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Scheme status badge — green "Active" */
+html.dark .bg-\[\#87A96B\]\/15 { background-color: rgba(156, 194, 125, 0.14) !important; }
 html.dark .text-\[\#3D522D\] { color: #A8D186 !important; }
 html.dark .text-\[\#55703F\] { color: #A8D186 !important; }
+
+/* Scheme status badge — amber "Pending" */
+html.dark .bg-\[\#D5851F\]\/15 { background-color: rgba(232, 149, 43, 0.14) !important; }
 html.dark .text-\[\#92520B\] { color: #F5B563 !important; }
 html.dark .text-\[\#B86C14\] { color: #F5B563 !important; }
 html.dark .text-\[\#6C3B07\] { color: #F5B563 !important; }
 
-/* Dark mode scrollbars */
+/* Category filter pill tab bar */
+html.dark .bg-\[\#5A3E2B\]\/10,
+html.dark [class*="bg-[#5A3E2B]/10"] {
+  background-color: rgba(240, 230, 218, 0.08) !important;
+}
+
+html.dark .bg-ink-navy\/5,
+html.dark [class*="bg-ink-navy/5"] {
+  background-color: rgba(240, 230, 218, 0.06) !important;
+}
+
+/* Active filter pill */
+html.dark .border-\[\#5A3E2B\].bg-\[\#5A3E2B\],
+html.dark [class*="bg-[#5A3E2B] text-white"] {
+  background-color: #E8952B !important;
+  border-color: #E8952B !important;
+  color: #0E0C0A !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11. ABOUT & PUBLIC PAGES — FAQ, feature cards
+   ══════════════════════════════════════════════════════════════════════════ */
+
+html.dark .min-h-screen.bg-warm-paper {
+  background-color: #0E0C0A !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   12. SCROLLBARS
+   ══════════════════════════════════════════════════════════════════════════ */
+
 html.dark .scrollbar-premium::-webkit-scrollbar-thumb {
-  background: rgba(245, 235, 225, 0.18) !important;
+  background: rgba(240, 230, 218, 0.16) !important;
 }
 html.dark .scrollbar-premium::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 235, 225, 0.35) !important;
+  background: rgba(240, 230, 218, 0.32) !important;
 }
 html.dark .scrollbar-premium {
-  scrollbar-color: rgba(245, 235, 225, 0.18) transparent !important;
+  scrollbar-color: rgba(240, 230, 218, 0.16) transparent !important;
 }
 
 /* ==========================================================================
