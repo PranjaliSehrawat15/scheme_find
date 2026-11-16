@@ -236,26 +236,26 @@ export function FAQ() {
 
   return (
     <section className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper dark:bg-[#0E0C0A] py-20 sm:py-28">
-      {/* Ambient glow orbs that illuminate the pencil sketches */}
+      {/* Ambient glow orbs that illuminate the pencil sketches with warm amber light */}
       <div className="pointer-events-none absolute -left-20 top-1/4 h-96 w-96 rounded-full bg-[#D5851F]/15 blur-3xl dark:bg-[#D5851F]/20" />
-      <div className="pointer-events-none absolute -right-20 top-1/3 h-96 w-96 rounded-full bg-[#87A96B]/15 blur-3xl dark:bg-[#87A96B]/20" />
+      <div className="pointer-events-none absolute -right-20 top-1/3 h-96 w-96 rounded-full bg-[#D5851F]/10 blur-3xl dark:bg-[#D5851F]/15" />
 
-      {/* Woman image — high visibility illuminated chalk sketch in dark mode */}
+      {/* Woman image — warm golden amber bronze sketch in dark mode (no negative/inverted effect) */}
       <img
         ref={womanRef}
         src="/assets/woman.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.25] dark:opacity-[0.60] dark:invert dark:brightness-140 dark:contrast-125 transition-opacity duration-300"
+        className="dark-sketch-tint pointer-events-none absolute bottom-0 opacity-[0.25] dark:opacity-[0.45]"
         style={{ right: "-2%", height: "110%", maxHeight: "820px" }}
       />
-      {/* Labour image — high visibility illuminated chalk sketch in dark mode */}
+      {/* Labour image — warm golden amber bronze sketch in dark mode (no negative/inverted effect) */}
       <img
         ref={labourRef}
         src="/assets/labour.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.25] dark:opacity-[0.60] dark:invert dark:brightness-140 dark:contrast-125 transition-opacity duration-300"
+        className="dark-sketch-tint pointer-events-none absolute bottom-0 opacity-[0.25] dark:opacity-[0.45]"
         style={{ left: "-2%", height: "110%", maxHeight: "820px" }}
       />
       {/* Decorative animated SVGs on left side */}

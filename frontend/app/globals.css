@@ -829,3 +829,13 @@ html.compact-mode .gap-4 {
 html.compact-mode .rounded-2xl {
   border-radius: 0.875rem !important;
 }
+
+/* Dark mode warm golden-amber sketch illumination (natural bronze line art, replaces harsh negative/inverted film effect) */
+.dark-sketch-tint {
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.dark .dark-sketch-tint {
+  filter: sepia(0.95) saturate(2.6) hue-rotate(-12deg) brightness(1.2) contrast(1.08);
+}
+
