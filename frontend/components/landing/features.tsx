@@ -100,9 +100,9 @@ export function Features() {
   ];
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden border-t border-ink-navy/8 py-20 sm:py-28">
+    <section ref={sectionRef} className="relative overflow-hidden border-t border-ink-navy/8 bg-warm-paper py-20 sm:py-28">
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 dark:opacity-10 dark:invert"
         style={{
           backgroundImage: "url('/assets/bottom-waves.svg')",
           backgroundSize: "cover",
@@ -110,7 +110,8 @@ export function Features() {
           backgroundRepeat: "no-repeat",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 dark:hidden" />
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/90 via-[#0E0C0A]/70 to-[#0E0C0A]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-navy sm:text-4xl">
@@ -128,7 +129,7 @@ export function Features() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="group rounded-xl border border-ink-navy/8 bg-warm-paper/50 p-6 transition-all hover:border-ink-navy/15 hover:shadow-sm"
+              className="group rounded-xl border border-ink-navy/8 bg-warm-paper/50 p-6 transition-all hover:border-ink-navy/15 hover:shadow-sm dark:border-white/10 dark:bg-[#1A1714] dark:hover:border-[#D5851F]/30"
             >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange">
                 {f.icon}

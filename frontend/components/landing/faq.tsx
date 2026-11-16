@@ -157,8 +157,8 @@ function AccordionItem({
       className={cn(
         "rounded-xl border transition-colors",
         isOpen
-          ? "border-ink-navy/15 bg-white shadow-sm"
-          : "border-ink-navy/8 bg-white/60 hover:bg-white hover:border-ink-navy/12"
+          ? "border-ink-navy/15 bg-white shadow-sm dark:bg-[#1E1A16] dark:border-[#D5851F]/40 dark:shadow-md"
+          : "border-ink-navy/8 bg-white/60 hover:bg-white hover:border-ink-navy/12 dark:bg-[#161311] dark:border-white/10 dark:hover:bg-[#1C1815] dark:hover:border-white/20"
       )}
     >
       <button
@@ -166,15 +166,15 @@ function AccordionItem({
         className="flex w-full items-center gap-3 px-5 py-4 text-left"
         aria-expanded={isOpen}
       >
-        <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange">
+        <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-signal-orange/10 text-signal-orange dark:bg-signal-orange/15">
           {icon}
         </span>
-        <span className="flex-1 text-sm font-semibold text-ink-navy sm:text-base">
+        <span className="flex-1 text-sm font-semibold text-ink-navy sm:text-base dark:text-[#F0E6DA]">
           {faq.q}
         </span>
         <svg
           className={cn(
-            "h-5 w-5 flex-shrink-0 text-slate-blue-400 transition-transform duration-200",
+            "h-5 w-5 flex-shrink-0 text-slate-blue-400 dark:text-[#C4B4A6] transition-transform duration-200",
             isOpen && "rotate-180"
           )}
           viewBox="0 0 24 24"
@@ -192,8 +192,8 @@ function AccordionItem({
         className="overflow-hidden"
         style={{ height: 0, opacity: 0 }}
       >
-        <div className="border-t border-ink-navy/8 px-5 pb-4 pt-3">
-          <p className="text-sm leading-relaxed text-slate-blue">{faq.a}</p>
+        <div className="border-t border-ink-navy/8 dark:border-white/10 px-5 pb-4 pt-3">
+          <p className="text-sm leading-relaxed text-slate-blue dark:text-[#CEBEAF]">{faq.a}</p>
         </div>
       </div>
     </div>
@@ -242,7 +242,7 @@ export function FAQ() {
         src="/assets/woman.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.12]"
+        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.05] dark:brightness-75"
         style={{ right: "-5%", height: "110%", maxHeight: "780px" }}
       />
       {/* Labour image — left side */}
@@ -251,7 +251,7 @@ export function FAQ() {
         src="/assets/labour.png"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute bottom-0 opacity-[0.12]"
+        className="pointer-events-none absolute bottom-0 opacity-[0.12] dark:opacity-[0.05] dark:brightness-75"
         style={{ left: "-5%", height: "110%", maxHeight: "780px" }}
       />
       {/* Decorative animated SVGs on left side */}

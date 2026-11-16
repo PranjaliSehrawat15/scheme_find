@@ -68,7 +68,7 @@ export function Hero() {
   }
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-gradient-to-b from-white via-warm-paper/40 to-warm-paper">
+    <section ref={sectionRef} className="relative overflow-hidden bg-gradient-to-b from-white via-warm-paper/40 to-warm-paper dark:from-[#14110F] dark:via-[#100D0B] dark:to-[#0E0C0A]">
       {/* Background ornament — subtle geometric accents */}
       <div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] opacity-[0.04]">
         <svg viewBox="0 0 500 500" fill="none" aria-hidden="true">

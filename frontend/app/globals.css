@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: "Fraunces", "Georgia", serif;
   --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
@@ -354,6 +356,44 @@ html.dark header.bg-\[\#FAF8F5\]\/95 {
 html.dark .bg-white,
 html.dark .bg-white\/95 {
   background-color: #1A1714 !important;
+}
+
+/* Translucent white surfaces across landing & app (FAQ accordion, cards, etc.) */
+html.dark .bg-white\/60,
+html.dark [class*="bg-white/60"] {
+  background-color: #161311 !important;
+}
+
+html.dark .bg-white\/70,
+html.dark [class*="bg-white/70"] {
+  background-color: #181512 !important;
+}
+
+html.dark .bg-white\/80,
+html.dark [class*="bg-white/80"] {
+  background-color: #1A1714 !important;
+}
+
+html.dark .bg-white\/50,
+html.dark [class*="bg-white/50"] {
+  background-color: #14120F !important;
+}
+
+/* Translucent gradients on landing features section */
+html.dark [class*="from-white/70"] {
+  --tw-gradient-from: rgba(14, 12, 10, 0.95) !important;
+}
+html.dark [class*="via-white/20"] {
+  --tw-gradient-via: rgba(14, 12, 10, 0.70) !important;
+}
+html.dark [class*="to-white/70"] {
+  --tw-gradient-to: rgba(14, 12, 10, 0.98) !important;
+}
+
+/* Landing hero gradient */
+html.dark [class*="from-white via-warm-paper/40 to-warm-paper"] {
+  background-image: linear-gradient(to bottom, #14110F, #100D0B, #0E0C0A) !important;
+  background-color: #0E0C0A !important;
 }
 
 /* Secondary surface elevation 2 — nested cards, table rows */
