@@ -300,6 +300,270 @@
 }
 
 /* ==========================================================================
+   SchemeFind Dark Mode System (Warm Espresso & Obsidian Theme)
+   ========================================================================== */
+
+html.dark {
+  color-scheme: dark;
+
+  /* Semantic Core Palette Overrides */
+  --color-warm-paper: #12100E;
+  --color-walnut-brown: #F5EBE1;
+  --color-ink-navy: #F5EBE1;
+  --color-slate-blue: #C7B8AA;
+  --color-amber-glow: #E8952B;
+  --color-sage-green: #9CC27D;
+}
+
+/* Base Body in Dark Mode */
+html.dark body {
+  background-color: #12100E !important;
+  color: #F5EBE1 !important;
+}
+
+/* Smooth theme transitions */
+body, header, nav, main, section, footer, div, a, button, input, textarea {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+/* --- 1. Surfaces & Backgrounds --- */
+
+/* Page Backgrounds (#FAF8F5 / warm-paper) */
+html.dark .bg-warm-paper,
+html.dark .bg-\[\#FAF8F5\],
+html.dark [class*="bg-[#FAF8F5]"]:not([class*="bg-[#FAF8F5]/"]):not([class*="hover:"]) {
+  background-color: #12100E !important;
+}
+
+/* Translucent Page Backgrounds (e.g. bg-[#FAF8F5]/95 on navbar / sticky headers) */
+html.dark header.bg-\[\#FAF8F5\]\/95,
+html.dark .bg-\[\#FAF8F5\]\/95,
+html.dark [class*="bg-[#FAF8F5]/95"] {
+  background-color: rgba(18, 16, 14, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* Cards & Surfaces (White -> Dark Roasted Espresso #1C1917) */
+html.dark .bg-white {
+  background-color: #1C1917 !important;
+}
+
+/* Light tinted surfaces (slate-50, gray-50, warm-paper/50, etc.) */
+html.dark .bg-slate-50,
+html.dark .bg-gray-50,
+html.dark .bg-neutral-50,
+html.dark .bg-zinc-50,
+html.dark .bg-slate-100\/50,
+html.dark .bg-slate-100\/80,
+html.dark .bg-warm-paper\/50,
+html.dark .bg-warm-paper\/80 {
+  background-color: #24201D !important;
+}
+
+/* Subtle secondary backgrounds (slate-100, gray-100, etc.) */
+html.dark .bg-slate-100,
+html.dark .bg-gray-100,
+html.dark .bg-neutral-100 {
+  background-color: #2A2521 !important;
+}
+
+/* --- 2. Typography & Text Colors --- */
+
+/* Primary Headings & Bold Text */
+html.dark .text-ink-navy,
+html.dark .text-walnut-brown,
+html.dark .text-\[\#5A3E2B\],
+html.dark [class*="text-[#5A3E2B]"]:not([class*="text-[#5A3E2B]/"]):not([class*="hover:"]) {
+  color: #F5EBE1 !important;
+}
+
+/* High-contrast body text */
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-neutral-900,
+html.dark .text-neutral-800,
+html.dark .text-neutral-700 {
+  color: #F0E5D8 !important;
+}
+
+/* Secondary / Medium Contrast Text */
+html.dark .text-\[\#6E5748\],
+html.dark .text-\[\#5A3E2B\]\/85,
+html.dark .text-\[\#5A3E2B\]\/80,
+html.dark .text-\[\#5A3E2B\]\/75,
+html.dark .text-\[\#5A3E2B\]\/70,
+html.dark .text-slate-600,
+html.dark .text-gray-600,
+html.dark .text-neutral-600 {
+  color: #D4C5B8 !important;
+}
+
+/* Muted / Caption / Metadata Text */
+html.dark .text-\[\#5A3E2B\]\/60,
+html.dark .text-\[\#5A3E2B\]\/50,
+html.dark .text-\[\#5A3E2B\]\/40,
+html.dark .text-slate-500,
+html.dark .text-slate-400,
+html.dark .text-gray-500,
+html.dark .text-gray-400,
+html.dark .text-neutral-500,
+html.dark .text-neutral-400 {
+  color: #9E8E80 !important;
+}
+
+/* --- 3. Borders & Dividers --- */
+
+html.dark .border-\[\#5A3E2B\]\/10,
+html.dark .border-\[\#5A3E2B\]\/15,
+html.dark .border-\[\#5A3E2B\]\/20,
+html.dark [class*="border-[#5A3E2B]"]:not([class*="border-l-[#5A3E2B]"]):not([class*="hover:"]) {
+  border-color: rgba(245, 235, 225, 0.12) !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(245, 235, 225, 0.10) !important;
+}
+
+/* --- 4. Interactive & Hover States --- */
+
+html.dark .hover\:bg-\[\#5A3E2B\]\/5:hover,
+html.dark [class*="hover:bg-[#5A3E2B]/5"]:hover,
+html.dark [class*="hover:bg-[#5A3E2B]/10"]:hover {
+  background-color: rgba(245, 235, 225, 0.08) !important;
+}
+
+html.dark .hover\:bg-\[\#FAF8F5\]:hover {
+  background-color: #26221E !important;
+}
+
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-gray-50:hover {
+  background-color: #24201D !important;
+}
+
+html.dark .hover\:text-\[\#5A3E2B\]:hover {
+  color: #FFFFFF !important;
+}
+
+/* Active Nav Links */
+html.dark .bg-\[\#D5851F\]\/10 {
+  background-color: rgba(232, 149, 43, 0.18) !important;
+}
+
+/* --- 5. Form Inputs, Selects, and Textareas --- */
+
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+html.dark textarea,
+html.dark select {
+  background-color: #1C1917 !important;
+  color: #F5EBE1 !important;
+  border-color: rgba(245, 235, 225, 0.18) !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: #E8952B !important;
+  outline-color: #E8952B !important;
+  box-shadow: 0 0 0 3px rgba(232, 149, 43, 0.25) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #8C7D70 !important;
+}
+
+/* --- 6. Elevated Components: Modals, Popups, Dropdowns --- */
+
+html.dark .shadow-sm,
+html.dark .shadow-xs {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Dropdown menus & popup dialogs */
+html.dark .rounded-xl.bg-white.shadow-lg,
+html.dark .rounded-xl.bg-white.shadow-xl,
+html.dark .rounded-2xl.bg-white.shadow-xl,
+html.dark .rounded-2xl.bg-white.shadow-2xl,
+html.dark [class*="absolute"][class*="bg-white"] {
+  background-color: #221E1A !important;
+  border-color: rgba(245, 235, 225, 0.15) !important;
+}
+
+/* --- 7. Floating Chat & Assistant Window --- */
+
+html.dark .bg-\[\#FAF8F5\] {
+  background-color: #12100E !important;
+}
+
+/* Assistant message card in floating chat */
+html.dark .bg-white.border.border-\[\#5A3E2B\]\/10 {
+  background-color: #1C1917 !important;
+  border-color: rgba(245, 235, 225, 0.12) !important;
+  color: #F5EBE1 !important;
+}
+
+/* User chat message */
+html.dark .bg-gradient-to-r.from-\[\#5A3E2B\].to-\[\#483122\] {
+  background-image: linear-gradient(to right, #4A3323, #362417) !important;
+  color: #FFFFFF !important;
+}
+
+/* --- 8. Category Filter Badges & Cards --- */
+
+html.dark .border-\[\#5A3E2B\]\/15.bg-white {
+  background-color: #1C1917 !important;
+  border-color: rgba(245, 235, 225, 0.12) !important;
+  color: #D4C5B8 !important;
+}
+
+html.dark .bg-\[\#5A3E2B\]\/10 {
+  background-color: rgba(245, 235, 225, 0.10) !important;
+}
+
+/* Category pill active for 'All' */
+html.dark .border-\[\#5A3E2B\].bg-\[\#5A3E2B\] {
+  background-color: #E8952B !important;
+  border-color: #E8952B !important;
+  color: #12100E !important;
+}
+
+/* Category badges text contrast in dark mode */
+html.dark .text-\[\#3D522D\] { color: #A8D186 !important; }
+html.dark .text-\[\#55703F\] { color: #A8D186 !important; }
+html.dark .text-\[\#92520B\] { color: #F5B563 !important; }
+html.dark .text-\[\#B86C14\] { color: #F5B563 !important; }
+html.dark .text-\[\#6C3B07\] { color: #F5B563 !important; }
+
+/* Dark mode scrollbars */
+html.dark .scrollbar-premium::-webkit-scrollbar-thumb {
+  background: rgba(245, 235, 225, 0.18) !important;
+}
+html.dark .scrollbar-premium::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 235, 225, 0.35) !important;
+}
+html.dark .scrollbar-premium {
+  scrollbar-color: rgba(245, 235, 225, 0.18) transparent !important;
+}
+
+/* ==========================================================================
    SchemeFind Compact View System (Streamlined Spacing)
    ========================================================================== */
 html.compact-mode body {
