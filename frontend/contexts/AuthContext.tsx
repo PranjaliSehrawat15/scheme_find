@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import { createContext, useEffect, useState, useCallback, useRef, type ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -35,9 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const inFlightSyncRef = useRef<string | null>(null);
 
   const ensureUserProfile = useCallback(async (currentUser: User) => {
-    if (!supabase) return;
+    if (!supabase || inFlightSyncRef.current === currentUser.id) return;
+    inFlightSyncRef.current = currentUser.id;
     try {
       // Server-side check: confirm session validity and prevent stale/forged identity injection
       const { data: { user: verifiedUser }, error: userErr } = await supabase.auth.getUser();
@@ -87,49 +89,83 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (e) {
       console.error("Error in ensureUserProfile self-healing:", e);
+    } finally {
+      inFlightSyncRef.current = null;
     }
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
+    // Safety fallback timeout: Ensures loading never hangs indefinitely on unreachable networks
+    const safetyTimer = setTimeout(() => {
+      if (isMounted) {
+        console.warn("Auth initialization safety timer triggered.");
+        setLoading(false);
+      }
+    }, 8000);
+
     const checkSession = async () => {
       if (!supabase) {
-        setLoading(false);
+        if (isMounted) setLoading(false);
         return;
       }
 
       try {
-        const { data } = await supabase.auth.getSession();
-        if (data.session) {
-          setSession(data.session);
-          setUser(data.session.user ?? null);
-          if (data.session.user) {
-            await ensureUserProfile(data.session.user);
+        const { data, error } = await supabase.auth.getSession();
+        if (error) {
+          console.warn("getSession notice:", error.message);
+        }
+        if (isMounted) {
+          if (data?.session) {
+            setSession(data.session);
+            setUser(data.session.user ?? null);
+            setLoading(false);
+            // Self-heal profile in the background without blocking the UI
+            if (data.session.user) {
+              void ensureUserProfile(data.session.user);
+            }
+          } else {
+            setSession(null);
+            setUser(null);
+            setLoading(false);
           }
         }
-      } catch {
-        // fallback
+      } catch (e) {
+        console.warn("checkSession error:", e);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+          clearTimeout(safetyTimer);
+        }
       }
     };
 
     checkSession();
 
-    if (!supabase) return;
+    if (!supabase) return () => clearTimeout(safetyTimer);
+
     const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!isMounted) return;
       if (session) {
         setSession(session);
         setUser(session.user ?? null);
+        setLoading(false);
         if (session.user) {
-          await ensureUserProfile(session.user);
+          void ensureUserProfile(session.user);
         }
       } else {
         setSession(null);
         setUser(null);
+        setLoading(false);
       }
     });
 
-    return () => listener?.subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      clearTimeout(safetyTimer);
+      listener?.subscription.unsubscribe();
+    };
   }, [ensureUserProfile]);
 
   const signIn = useCallback(async (email: string, password: string, redirectPath?: string): Promise<{ error?: string }> => {

@@ -17,10 +17,16 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 function applyTheme(dark: boolean) {
-  document.documentElement.classList.toggle("dark", dark);
+  if (typeof document === "undefined") return;
+  if (dark) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
 }
 
 function persistTheme(dark: boolean) {
+  if (typeof window === "undefined") return;
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
     const settings = raw ? JSON.parse(raw) : {};
@@ -34,8 +40,12 @@ function persistTheme(dark: boolean) {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(false);
 
-  // Initialize theme on client mount from persisted storage or system preference
+  // Initialize theme on client mount from DOM reality, persisted storage or system preference
   useEffect(() => {
+    // 1. Immediately read what layout.tsx <script> established on <html>
+    const isDomDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+    setIsDark(isDomDark);
+
     try {
       const raw = localStorage.getItem(SETTINGS_KEY);
       if (raw) {
@@ -52,7 +62,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         applyTheme(true);
       }
     } catch {
-      // Fallback to light
+      // Fallback
     }
   }, []);
 
@@ -67,11 +77,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    // isDark is in the dependency array — closure is always fresh
-    setTheme(!isDark);
+    // Determine target based on the real DOM state so toggling can never desync
+    const isCurrentlyDark = typeof document !== "undefined"
+      ? document.documentElement.classList.contains("dark")
+      : isDark;
+    setTheme(!isCurrentlyDark);
   }, [isDark, setTheme]);
 
-  // Cross-tab synchronization: storage events fire in OTHER tabs only
+  // Synchronize across tabs and listen for internal settings updates
   useEffect(() => {
     const handleStorageEvent = () => {
       try {
@@ -86,12 +99,36 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       } catch {}
     };
 
-    // Only listen to native storage (cross-tab). The custom event is for
-    // same-tab component sync and should NOT loop back into this handler
-    // to avoid infinite dispatch cycles.
+    const handleThemeChangeEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ dark?: boolean }>;
+      if (typeof customEvent.detail?.dark === "boolean") {
+        const next = customEvent.detail.dark;
+        setIsDark((prev) => (prev !== next ? next : prev));
+        applyTheme(next);
+      } else {
+        try {
+          const raw = localStorage.getItem(SETTINGS_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (typeof parsed.darkMode === "boolean") {
+              setIsDark((prev) => (prev !== parsed.darkMode ? parsed.darkMode : prev));
+              applyTheme(parsed.darkMode);
+              return;
+            }
+          }
+        } catch {}
+        if (typeof document !== "undefined") {
+          const domDark = document.documentElement.classList.contains("dark");
+          setIsDark((prev) => (prev !== domDark ? domDark : prev));
+        }
+      }
+    };
+
     window.addEventListener("storage", handleStorageEvent);
+    window.addEventListener("schemefind_theme_change", handleThemeChangeEvent);
     return () => {
       window.removeEventListener("storage", handleStorageEvent);
+      window.removeEventListener("schemefind_theme_change", handleThemeChangeEvent);
     };
   }, []);
 

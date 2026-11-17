@@ -71,7 +71,7 @@ export function Navbar() {
 
   return (
     <div className="sticky top-0 z-50 flex flex-col w-full shadow-xs">
-      <header className="bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#5A3E2B]/10">
+      <header className="bg-[#FAF8F5]/95 dark:bg-[#0E0C0A]/95 backdrop-blur-md border-b border-[#5A3E2B]/10 dark:border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <Logo href={user ? "/dashboard" : "/"} size="md" />
 
@@ -115,7 +115,13 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             {loading ? (
-              <div className="h-8 w-8 rounded-full bg-slate-100 animate-pulse" />
+              <div
+                role="status"
+                className="h-8 w-8 rounded-full bg-[#FAF8F5] dark:bg-[#1A1613] border border-[#5A3E2B]/15 dark:border-white/15 animate-pulse flex items-center justify-center shadow-xs"
+                aria-label="Loading account status..."
+              >
+                <div className="h-3.5 w-3.5 rounded-full bg-[#D5851F]/40 animate-pulse" />
+              </div>
             ) : user ? (
               <div className="relative" ref={menuRef}>
                 <button
